@@ -1,1 +1,2 @@
-# Xeno-ai-gateway
+# XENO AI Gateway v0.2
+Cloudflare Worker for XENO Mobile. Deploy through Cloudflare's GitHub integration. Set `GROQ_API_KEY` and `XENO_ACCESS_TOKEN` as encrypted secrets, and `ALLOWED_ORIGIN` to the exact origin of your GitHub Pages site (e.g. https://username.github.io). Do not commit secret values. The shared browser token is temporary and not suitable as production authentication; add proper authentication and rate limits before public use.
