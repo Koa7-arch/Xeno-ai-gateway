@@ -10,16 +10,17 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <title>XENO Mobile</title>
 <style>
-:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif}*{box-sizing:border-box}body{margin:0;background:#090e1b;color:#e9f0ff}button,input{font:inherit}button{background:#19a7c9;border:0;color:#04121a;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}button.secondary{background:#1b2a40;color:#d9ebff}button:disabled{opacity:.5;cursor:default}button:focus-visible,input:focus-visible{outline:2px solid #8adfff;outline-offset:2px}.shell{max-width:780px;margin:auto;min-height:100dvh;display:flex;flex-direction:column}header{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid #233047}h1{font-size:20px;letter-spacing:.22em;margin:0;color:#8adfff}small{color:#8194b0}.tag{font-size:12px;color:#5fd0ab}.actions{display:flex;gap:7px;flex-wrap:wrap}.view{flex:1}.hidden{display:none!important}.messages{padding:18px 18px 130px}.bubble{max-width:86%;padding:13px 16px;border-radius:17px;margin:14px 0;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;background:#172237;border:1px solid #283852}.bubble.user{margin-left:auto;background:#16364b;border-color:#1c6077}.dock{position:fixed;bottom:0;left:0;right:0;background:#0c1423;border-top:1px solid #233047;padding:12px max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom))}.dock-inner{max-width:750px;margin:auto;display:flex;gap:8px}input{flex:1;min-width:0;background:#172237;border:1px solid #31425a;border-radius:12px;padding:14px;color:white;font-size:16px}.panel{padding:18px;border-bottom:1px solid #25384e;background:#111d2e}.panel p{color:#a7b7cb;line-height:1.5}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 18px}.list{padding:0 18px 32px}.chat-item{display:flex;align-items:center;gap:8px;background:#172237;border:1px solid #283852;border-radius:14px;padding:10px;margin-bottom:10px}.chat-item.active{border-color:#19a7c9}.chat-open{flex:1;text-align:left;background:transparent;color:#e9f0ff;padding:7px;min-width:0}.chat-open strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chat-open small{display:block;margin-top:5px}.mini{padding:8px 10px;font-size:13px}.muted{color:#8194b0;padding:0 18px}.notice{margin:12px 18px;padding:12px;border:1px solid #66552c;background:#30291c;border-radius:10px;color:#ffe3a1}
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif}*{box-sizing:border-box}body{margin:0;background:#090e1b;color:#e9f0ff}button,input,textarea{font:inherit}button{background:#19a7c9;border:0;color:#04121a;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}button.secondary{background:#1b2a40;color:#d9ebff}button:disabled{opacity:.5;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #8adfff;outline-offset:2px}.shell{max-width:780px;margin:auto;min-height:100dvh;display:flex;flex-direction:column}header{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid #233047}h1{font-size:20px;letter-spacing:.22em;margin:0;color:#8adfff}small{color:#8194b0}.tag{font-size:12px;color:#5fd0ab}.actions{display:flex;gap:7px;flex-wrap:wrap}.view{flex:1}.hidden{display:none!important}.messages{padding:18px 18px 130px}.bubble{max-width:86%;padding:13px 16px;border-radius:17px;margin:14px 0;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;background:#172237;border:1px solid #283852}.bubble.user{margin-left:auto;background:#16364b;border-color:#1c6077}.dock{position:fixed;bottom:0;left:0;right:0;background:#0c1423;border-top:1px solid #233047;padding:12px max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom))}.dock-inner{max-width:750px;margin:auto;display:flex;gap:8px}input{flex:1;min-width:0;background:#172237;border:1px solid #31425a;border-radius:12px;padding:14px;color:white;font-size:16px}.panel{padding:18px;border-bottom:1px solid #25384e;background:#111d2e}.panel p{color:#a7b7cb;line-height:1.5}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 18px}.list{padding:0 18px 32px}.chat-item{display:flex;align-items:center;gap:8px;background:#172237;border:1px solid #283852;border-radius:14px;padding:10px;margin-bottom:10px}.chat-item.active{border-color:#19a7c9}.chat-open{flex:1;text-align:left;background:transparent;color:#e9f0ff;padding:7px;min-width:0}.chat-open strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chat-open small{display:block;margin-top:5px}.mini{padding:8px 10px;font-size:13px}.muted{color:#8194b0;padding:0 18px}.notice{margin:12px 18px;padding:12px;border:1px solid #66552c;background:#30291c;border-radius:10px;color:#ffe3a1}.profile-fields{padding:0 18px 32px}.profile-field{display:block;margin:0 0 16px}.profile-field span{display:block;font-weight:700;margin-bottom:8px}.profile-field textarea{display:block;width:100%;min-height:105px;resize:vertical;background:#172237;border:1px solid #31425a;border-radius:12px;padding:13px;color:#e9f0ff;font-size:16px;line-height:1.45}.profile-help{color:#a7b7cb;line-height:1.5;margin:0 0 20px}.profile-status{color:#5fd0ab;min-height:22px;margin:12px 0}.profile-actions{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 </head>
 <body>
 <div class="shell">
-<header><div><h1>XENO</h1><small>MOBILE / v0.4 <span class="tag" id="status">● CONNECTING</span></small></div><div class="actions"><button id="chatsButton" class="secondary">Conversations</button><button id="settingsButton" class="secondary" aria-label="Settings">⚙</button></div></header>
-<section id="settings" class="panel hidden"><strong>Settings</strong><p>Conversations are saved locally on this device. Export backups regularly. Local storage is not synchronized between installations or devices.</p><div class="actions"><button id="exportButton">Export JSON backup</button><button id="importButton" class="secondary">Import JSON backup</button><button id="closeSettings" class="secondary">Close</button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden"><p>Imported backups merge by conversation ID. Existing chats are not overwritten.</p></section>
+<header><div><h1>XENO</h1><small>MOBILE / v0.5 <span class="tag" id="status">● CONNECTING</span></small></div><div class="actions"><button id="chatsButton" class="secondary">Conversations</button><button id="profileButton" class="secondary">Profile</button><button id="settingsButton" class="secondary" aria-label="Settings">⚙</button></div></header>
+<section id="settings" class="panel hidden"><strong>Settings</strong><p>Conversations are saved locally on this device. Export backups regularly. Local storage is not synchronized between installations or devices.</p><div class="actions"><button id="exportButton">Export JSON backup</button><button id="importButton" class="secondary">Import JSON backup</button><button id="closeSettings" class="secondary">Close</button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden"><p>Imported backups merge by conversation ID. Existing chats are not overwritten.</p><p>Your v0.5 profile is stored separately and is not included in v0.4 conversation backups.</p></section>
 <section id="errorNotice" class="notice hidden" role="alert"></section>
 <main id="chatView" class="view"><div id="messages" class="messages" aria-live="polite"></div></main>
 <main id="conversationsView" class="view hidden"><div class="toolbar"><strong>Your conversations</strong><button id="newChatButton">+ New Chat</button></div><div id="conversationList" class="list"></div></main>
+<main id="profileView" class="view hidden"><div class="toolbar"><strong>Personal Profile</strong><button id="backToChat" class="secondary">Back to Chat</button></div><div class="profile-fields"><p class="profile-help">Edit what XENO should know about you. This profile is saved on this device, separately from your conversations. AI personalization is not enabled yet.</p><form id="profileForm"><label class="profile-field"><span>Identity &amp; Values</span><textarea id="profileIdentity" maxlength="4000"></textarea></label><label class="profile-field"><span>Career &amp; Education</span><textarea id="profileCareer" maxlength="4000"></textarea></label><label class="profile-field"><span>Software Projects</span><textarea id="profileProjects" maxlength="4000"></textarea></label><label class="profile-field"><span>Personal Goals</span><textarea id="profileGoals" maxlength="4000"></textarea></label><label class="profile-field"><span>Creative Interests</span><textarea id="profileInterests" maxlength="4000"></textarea></label><label class="profile-field"><span>Assistant Preferences</span><textarea id="profilePreferences" maxlength="4000"></textarea></label><div class="profile-actions"><button type="submit">Save Profile</button><button type="button" id="discardProfile" class="secondary">Discard Unsaved Changes</button></div><p id="profileStatus" class="profile-status" role="status" aria-live="polite"></p></form></div></main>
 </div>
 <form class="dock" id="form"><div class="dock-inner"><input id="prompt" aria-label="Message" placeholder="Message XENO…" autocomplete="off" required maxlength="4000"><button id="sendButton" type="submit">Send</button></div></form>
 <script>
@@ -27,13 +28,17 @@
 'use strict';
 const OLD_KEY='xeno-mobile-chat-v1';
 const STORE_KEY='xeno-mobile-chats-v04';
+const PROFILE_KEY='xeno-mobile-profile-v05';
+const PROFILE_FIELDS={identity:'profileIdentity',career:'profileCareer',projects:'profileProjects',goals:'profileGoals',interests:'profileInterests',preferences:'profilePreferences'};
+const FALLBACK_PROFILE={identity:'My name is Wyatt. I value discipline, consistency, integrity, curiosity, and long-term improvement.',career:'I work in the oilfield. I am developing my CDL and equipment skills, and I am interested in engineering and CAD.',projects:'I am building XENO and a software ecosystem that includes VAULT, FORGE, ASCEND, and other tools.',goals:'My goals include financial independence, land ownership, career development, and physical fitness.',interests:'I create music under ARDENT. I enjoy gaming, Pokémon, and creative writing.',preferences:'I prefer direct, practical advice, honest feedback, step-by-step guidance, and accountability.'};
 const area=document.getElementById('messages');
 const input=document.getElementById('prompt');
 const form=document.getElementById('form');
 const sendButton=document.getElementById('sendButton');
 const status=document.getElementById('status');
 const errorNotice=document.getElementById('errorNotice');
-let state=null, busy=false, storageOK=true;
+const profileStatus=document.getElementById('profileStatus');
+let state=null, busy=false, storageOK=true, profile=null, profileDirty=false;
 const makeId=()=>crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const isMessage=m=>m && (m.role==='user'||m.role==='assistant') && typeof m.text==='string' && m.text.length<=20000;
 const isChat=c=>c && typeof c.id==='string' && typeof c.title==='string' && Array.isArray(c.messages) && c.messages.every(isMessage);
@@ -78,8 +83,12 @@ function renderList(){
   }
 }
 function show(which){
-  const isChat=which==='chat';document.getElementById('chatView').classList.toggle('hidden',!isChat);document.getElementById('conversationsView').classList.toggle('hidden',isChat);form.classList.toggle('hidden',!isChat);
-  if(isChat)renderMessages();else renderList();
+  if(which!=='profile' && document.getElementById('profileView').classList.contains('hidden')===false && profileDirty){if(!confirm('Discard unsaved profile changes?'))return;fillProfile();profileDirty=false}
+  document.getElementById('chatView').classList.toggle('hidden',which!=='chat');
+  document.getElementById('conversationsView').classList.toggle('hidden',which!=='conversations');
+  document.getElementById('profileView').classList.toggle('hidden',which!=='profile');
+  form.classList.toggle('hidden',which!=='chat');
+  if(which==='chat')renderMessages();else if(which==='conversations')renderList();
 }
 function newChat(){if(busy)return;const chat=blankChat();state.chats.push(chat);state.activeId=chat.id;save();show('chat');input.focus()}
 async function checkHealth(){try{const r=await fetch('/health',{cache:'no-store'});if(!r.ok)throw Error('not ready');const d=await r.json();status.textContent=d.status==='online'?'● AI ONLINE':'● UNAVAILABLE'}catch{status.textContent='● LOGIN / CONNECTION REQUIRED'}}
@@ -118,8 +127,30 @@ document.getElementById('importFile').onchange=async e=>{
     if(!save())return;clearNotice();renderList();alert(`Imported ${count} conversation(s). Existing conversations were preserved.`);
   }catch(err){notice(`Import failed: ${err.message}`)}
 };
+function validProfile(p){return p && p.version===1 && Object.keys(PROFILE_FIELDS).every(k=>typeof p[k]==='string'&&p[k].length<=4000)}
+function fillProfile(){if(!profile)return;for(const [field,id] of Object.entries(PROFILE_FIELDS))document.getElementById(id).value=profile[field]}
+function readProfile(){const result={version:1};for(const [field,id] of Object.entries(PROFILE_FIELDS))result[field]=document.getElementById(id).value.trim();return result}
+async function initializeProfile(){
+  let stored=null;
+  try{stored=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null')}catch{}
+  if(validProfile(stored)){profile=stored;fillProfile();return}
+  let defaults=FALLBACK_PROFILE;
+  try{const response=await fetch('./profile-defaults.json',{cache:'no-store'});if(response.ok){const parsed=await response.json();if(validProfile(parsed))defaults=parsed}}catch{}
+  profile={version:1,...defaults};
+  try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile))}catch{notice('Profile storage unavailable. Your changes may not persist.')}
+  fillProfile();
+}
+document.getElementById('profileButton').onclick=()=>{if(!profile){notice('Profile is still loading. Try again.');return}show('profile')};
+document.getElementById('backToChat').onclick=()=>show('chat');
+for(const id of Object.values(PROFILE_FIELDS))document.getElementById(id).addEventListener('input',()=>{profileDirty=true;profileStatus.textContent='Unsaved changes'});
+document.getElementById('profileForm').addEventListener('submit',event=>{
+  event.preventDefault();const next=readProfile();
+  try{localStorage.setItem(PROFILE_KEY,JSON.stringify(next));profile=next;profileDirty=false;profileStatus.textContent='Profile saved on this device.';clearNotice()}
+  catch{profileStatus.textContent='Profile was not saved.';notice('Unable to save profile. Check available storage.')}
+});
+document.getElementById('discardProfile').onclick=()=>{if(profileDirty&&!confirm('Discard unsaved profile changes?'))return;fillProfile();profileDirty=false;profileStatus.textContent='Changes discarded.'};
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-show('chat');checkHealth();
+show('chat');checkHealth();initializeProfile();
 })();
 </script>
 </body>
