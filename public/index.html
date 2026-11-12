@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="shell">
-<header><div><h1>XENO</h1><small>MOBILE / v0.5 <span class="tag" id="status">● CONNECTING</span></small></div><div class="actions"><button id="chatsButton" class="secondary">Conversations</button><button id="profileButton" class="secondary">Profile</button><button id="settingsButton" class="secondary" aria-label="Settings">⚙</button></div></header>
+<header><div><h1>XENO</h1><small>MOBILE / v0.6 <span class="tag" id="status">● CONNECTING</span></small></div><div class="actions"><button id="chatsButton" class="secondary">Conversations</button><button id="profileButton" class="secondary">Profile</button><button id="settingsButton" class="secondary" aria-label="Settings">⚙</button></div></header>
 <section id="settings" class="panel hidden"><strong>Settings</strong><p>Conversations are saved locally on this device. Export backups regularly. Local storage is not synchronized between installations or devices.</p><div class="actions"><button id="exportButton">Export JSON backup</button><button id="importButton" class="secondary">Import JSON backup</button><button id="closeSettings" class="secondary">Close</button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden"><p>Imported backups merge by conversation ID. Existing chats are not overwritten.</p><p>Your v0.5 profile is stored separately and is not included in v0.4 conversation backups.</p><div class="awareness-settings"><strong>Profile Awareness</strong><p>When enabled, selected profile categories are sent to Groq with each chat request. Turn off any category you do not want shared. Changes are saved on this device.</p><label class="awareness-option"><input type="checkbox" id="awarenessEnabled"> Enable Profile Awareness</label><div id="awarenessCategories"></div><p id="awarenessStatus" class="profile-status" role="status" aria-live="polite"></p></div></section>
 <section id="errorNotice" class="notice hidden" role="alert"></section>
 <main id="chatView" class="view"><div id="messages" class="messages" aria-live="polite"></div></main>
@@ -64,6 +64,13 @@ function load(){
 }
 state=load();save();
 const current=()=>state.chats.find(c=>c.id===state.activeId);
+window.xenoV06UpdateProposal=(chatId,proposalId,newStatus)=>{
+  if(!['approved','rejected'].includes(newStatus))return false;
+  const chat=state.chats.find(c=>c.id===chatId);
+  const proposal=chat?.proposals?.find(p=>p.id===proposalId && p.status==='pending');
+  if(!proposal)return false;
+  proposal.status=newStatus;return save();
+};
 const shorten=s=>s.length>44?s.slice(0,44)+'…':s;
 function renderMessages(){
   area.replaceChildren();const chat=current();
@@ -111,7 +118,12 @@ form.addEventListener('submit',async event=>{
     if(shared)payload.profile=shared;
     const response=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(payload)});
     const data=await response.json();if(!response.ok)throw Error(data.error||'Gateway error');
-    chat.messages.push({role:'assistant',text:data.reply||'No response received.'});save();
+    chat.messages.push({role:'assistant',text:data.reply||'No response received.'});
+    if(Array.isArray(data.proposals)&&data.proposals.length){
+      const proposals=data.proposals.filter(p=>p && p.type==='create_task' && p.status==='pending' && typeof p.id==='string' && typeof p.title==='string' && p.title.length<=120 && typeof p.notes==='string' && p.notes.length<=500);
+      chat.proposals=[...(chat.proposals||[]),...proposals];
+    }
+    save();window.dispatchEvent(new Event('xeno:chat-updated'));
   }catch(err){notice(`Connection error: ${err.message}. Your message remains saved. Sign in through Safari if needed, then try again.`)}
   finally{busy=false;sendButton.disabled=false;sendButton.textContent='Send';renderMessages();checkHealth()}
 });
@@ -200,5 +212,6 @@ if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.ser
 loadAwareness();renderAwareness();show('chat');checkHealth();initializeProfile();
 })();
 </script>
+<script src="./tools-v06.js"></script>
 </body>
 </html>
