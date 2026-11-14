@@ -1,0 +1,6 @@
+/* XENO v0.7: verified tool activity badge and expandable record */
+.x-trace{margin:0 18px 14px;max-width:86%;border:1px solid #66458e;border-radius:13px;background:#1b122b;color:#e8d9fa;overflow:hidden}
+.x-trace>summary{cursor:pointer;padding:11px 13px;font-size:12px;font-weight:700;color:#d4a6ff;list-style-position:inside}
+.x-trace-line{padding:10px 13px;border-top:1px solid #3b2853;display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:12px}
+.x-trace-line small{grid-column:1/-1;color:#b8a7c9;overflow-wrap:anywhere}
+.x-trace-ok{color:#76dbb3}.x-trace-error{color:#ff9999}
