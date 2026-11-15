@@ -205,7 +205,7 @@ export default {
       return json({
         application: 'XENO AI Gateway',
         status: 'online',
-        version: '0.6',
+        version: '0.7.0',
         providers: ['groq'],
         profileSupport: true
       });

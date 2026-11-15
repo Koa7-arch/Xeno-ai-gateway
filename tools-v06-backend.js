@@ -90,4 +90,4 @@ export function validateToolRequest(method,request,url){
 }
 
 // Only these deterministic tools may be called directly from the workspace.
-export const DIRECT_TOOLS = new Set(['calculate','convert_units','date_difference']);
+export const DIRECT_TOOLS = new Set(['calculate','convert_units','date_difference','estimate_overtime_pay','savings_projection','percentage_change']);
