@@ -73,10 +73,36 @@ window.xenoV06UpdateProposal=(chatId,proposalId,newStatus)=>{
   proposal.status=newStatus;return save();
 };
 const shorten=s=>s.length>44?s.slice(0,44)+'…':s;
+// Rich responses: escape all model text before applying a restricted Markdown subset.
+const xenoEscape = value => String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+function xenoInline(text){
+  let html=xenoEscape(text);
+  html=html.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  html=html.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+  html=html.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,(_,label,url)=>'<a href="'+url.replace(/&quot;|&#39;/g,'')+'" target="_blank" rel="noopener noreferrer">'+label+'</a>');
+  return html;
+}
+function xenoRenderRich(node,source){
+  const lines=String(source||'').replace(/\r\n?/g,'\n').split('\n');let html='',para=[],list=[],kind='';
+  const flushPara=()=>{if(para.length){html+='<p>'+para.map(xenoInline).join('<br>')+'</p>';para=[]}};
+  const flushList=()=>{if(list.length){html+='<'+kind+'>'+list.map(x=>'<li>'+xenoInline(x)+'</li>').join('')+'</'+kind+'>';list=[];kind=''}};
+  for(let i=0;i<lines.length;i++){
+    let line=lines[i],m;
+    if(/^```/.test(line.trim())){flushPara();flushList();let language=line.trim().slice(3).replace(/[^a-zA-Z0-9+#-]/g,'').slice(0,20);let code=[];while(++i<lines.length&&!/^```/.test(lines[i].trim()))code.push(lines[i]);html+='<pre><code>'+xenoEscape(code.join('\n'))+'</code></pre>';continue}
+    if(!line.trim()){flushPara();flushList();continue}
+    if((m=line.match(/^(#{1,4})\s+(.+)$/))){flushPara();flushList();const level=Math.min(m[1].length+1,5);html+='<h'+level+'>'+xenoInline(m[2])+'</h'+level+'>';continue}
+    if(/^\s*\|.*\|\s*$/.test(line)&&i+1<lines.length&&/^\s*\|?\s*:?-{3,}/.test(lines[i+1])){flushPara();flushList();let rows=[line];i++;while(i+1<lines.length&&/^\s*\|.*\|\s*$/.test(lines[i+1]))rows.push(lines[++i]);const cells=r=>r.trim().replace(/^\||\|$/g,'').split('|').map(c=>c.trim());html+='<div class="x-table-scroll"><table><thead><tr>'+cells(rows[0]).map(c=>'<th>'+xenoInline(c)+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(1).map(r=>'<tr>'+cells(r).map(c=>'<td>'+xenoInline(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';continue}
+    if((m=line.match(/^\s*([-*]|\d+\.)\s+(.+)$/))){flushPara();let next=/\d/.test(m[1][0])?'ol':'ul';if(kind&&kind!==next)flushList();kind=next;list.push(m[2]);continue}
+    if(line.startsWith('> ')){flushPara();flushList();html+='<blockquote>'+xenoInline(line.slice(2))+'</blockquote>';continue}
+    flushList();para.push(line);
+  }
+  flushPara();flushList();node.innerHTML=html||'<p></p>';
+}
+
 function renderMessages(){
   area.replaceChildren();const chat=current();
   if(!chat.messages.length){const p=document.createElement('div');p.className='bubble';p.textContent='XENO ready. Send a message to begin.';area.append(p)}
-  for(const m of chat.messages){const p=document.createElement('div');p.className='bubble '+(m.role==='user'?'user':'');p.textContent=m.text;area.append(p)}
+  for(const m of chat.messages){const p=document.createElement('div');p.className='bubble '+(m.role==='user'?'user':'');if(m.role==='assistant'){p.classList.add('x-rich');xenoRenderRich(p,m.text)}else p.textContent=m.text;area.append(p)}
   window.scrollTo(0,document.body.scrollHeight);
 }
 function renderList(){
@@ -226,5 +252,6 @@ loadAwareness();renderAwareness();show('chat');checkHealth();initializeProfile()
 <script src="./xeno-unified-v10.js?v=101"></script>
 <script src="./xeno-navigation-v101.js?v=101"></script>
 <script src="./xeno-capabilities-v120.js?v=120"></script>
+<link rel="stylesheet" href="./xeno-rich-v121.css?v=121">
 </body>
 </html>

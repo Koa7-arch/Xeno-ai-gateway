@@ -1,5 +1,5 @@
 // XENO v0.4: network-first static assets; never cache API or Access pages.
-const CACHE = 'xeno-mobile-v120';
+const CACHE = 'xeno-mobile-v121';
 const FILES = new Set(['/manifest.webmanifest', '/icon.svg']);
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', event => {
