@@ -1,0 +1,1041 @@
+{
+  "version": "1.2.0",
+  "note": "Inventory, not a claim of implementation. Available=local/AI capability, limited=partial, requires-connection=external setup, planned=not built. Validate each on the target device.",
+  "capabilities": [
+    {
+      "category": "AI Intelligence",
+      "name": "Natural conversation",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Advanced reasoning",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Model selection",
+      "status": "planned"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Tool calling",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Agentic execution",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Multimodal understanding",
+      "status": "planned"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Response generation",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Conversation management",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Context management",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Error recovery",
+      "status": "available"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Streaming responses",
+      "status": "planned"
+    },
+    {
+      "category": "AI Intelligence",
+      "name": "Source attribution",
+      "status": "planned"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Persistent memory",
+      "status": "limited"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Memory search",
+      "status": "limited"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Memory editing",
+      "status": "limited"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Preference learning",
+      "status": "available"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Custom instructions",
+      "status": "available"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Adaptive workspaces",
+      "status": "available"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Goal management",
+      "status": "available"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Priority switching",
+      "status": "available"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Context isolation",
+      "status": "limited"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Adaptive tool selection",
+      "status": "available"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Adaptive recommendations",
+      "status": "limited"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Feedback system",
+      "status": "limited"
+    },
+    {
+      "category": "Memory & Adaptability",
+      "name": "Memory export/import",
+      "status": "limited"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Calculator",
+      "status": "available"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Unit conversions",
+      "status": "available"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Algebra and equation solving",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Calculus and numerical methods",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Geometry and trigonometry",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Statistics and probability",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Matrix and vector calculations",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Graph generation",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Physics calculations",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Mechanical engineering formulas",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Material property calculations",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Force torque pressure and power",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "CAD-related calculations and file support",
+      "status": "planned"
+    },
+    {
+      "category": "Mathematics & Engineering",
+      "name": "Engineering reference lookup",
+      "status": "planned"
+    },
+    {
+      "category": "Finance",
+      "name": "Overtime and wage calculations",
+      "status": "available"
+    },
+    {
+      "category": "Finance",
+      "name": "Paycheck estimates",
+      "status": "planned"
+    },
+    {
+      "category": "Finance",
+      "name": "Budget creation and tracking",
+      "status": "available"
+    },
+    {
+      "category": "Finance",
+      "name": "Expense analysis",
+      "status": "limited"
+    },
+    {
+      "category": "Finance",
+      "name": "Savings projections",
+      "status": "available"
+    },
+    {
+      "category": "Finance",
+      "name": "Savings-goal timelines",
+      "status": "available"
+    },
+    {
+      "category": "Finance",
+      "name": "Compound interest calculations",
+      "status": "available"
+    },
+    {
+      "category": "Finance",
+      "name": "Loan and mortgage calculations",
+      "status": "available"
+    },
+    {
+      "category": "Finance",
+      "name": "Debt payoff planning",
+      "status": "planned"
+    },
+    {
+      "category": "Finance",
+      "name": "Financial scenario comparisons",
+      "status": "limited"
+    },
+    {
+      "category": "Finance",
+      "name": "Cash-flow projections",
+      "status": "limited"
+    },
+    {
+      "category": "Finance",
+      "name": "Financial reports and charts",
+      "status": "limited"
+    },
+    {
+      "category": "Finance",
+      "name": "Transaction categorization",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Finance",
+      "name": "Investment research and analysis",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Task creation editing completion and deletion",
+      "status": "limited"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Project creation and management",
+      "status": "limited"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Calendar event creation and editing",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Scheduling and availability checks",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Reminders and deadlines",
+      "status": "available"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Recurring task management",
+      "status": "planned"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Notes and notebooks",
+      "status": "planned"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Checklists",
+      "status": "planned"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Daily and weekly planning",
+      "status": "limited"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Priority ranking",
+      "status": "limited"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Time tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Habit tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Goal tracking",
+      "status": "available"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Document organization",
+      "status": "planned"
+    },
+    {
+      "category": "Organization & Productivity",
+      "name": "Workspace management",
+      "status": "available"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Live web search",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Website reading and summarization",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Source comparison and verification",
+      "status": "limited"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Research reports",
+      "status": "limited"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "PDF reading and analysis",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Word document reading and creation",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Spreadsheet reading and analysis",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Presentation reading and creation",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Data extraction",
+      "status": "planned"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Knowledge-base search",
+      "status": "planned"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Citation generation",
+      "status": "planned"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Fact checking",
+      "status": "limited"
+    },
+    {
+      "category": "Research & Knowledge",
+      "name": "Research history",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Code generation",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Code explanation",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Code debugging",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Code review",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Code refactoring",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Project scaffolding",
+      "status": "planned"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Repository browsing",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "GitHub integration",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "API testing",
+      "status": "planned"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "JSON and structured-data processing",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Database queries",
+      "status": "planned"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Test generation and execution",
+      "status": "planned"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Software documentation",
+      "status": "available"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Deployment preparation",
+      "status": "planned"
+    },
+    {
+      "category": "Programming & Development",
+      "name": "Authorized deployment workflows",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Creative",
+      "name": "Creative writing",
+      "status": "available"
+    },
+    {
+      "category": "Creative",
+      "name": "Songwriting and lyric development",
+      "status": "available"
+    },
+    {
+      "category": "Creative",
+      "name": "Character creation",
+      "status": "available"
+    },
+    {
+      "category": "Creative",
+      "name": "Worldbuilding",
+      "status": "available"
+    },
+    {
+      "category": "Creative",
+      "name": "Story outlining",
+      "status": "available"
+    },
+    {
+      "category": "Creative",
+      "name": "Image generation and editing",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Creative",
+      "name": "Graphic design assistance",
+      "status": "planned"
+    },
+    {
+      "category": "Creative",
+      "name": "Audio transcription",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Creative",
+      "name": "Audio analysis",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Creative",
+      "name": "Video summarization",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Creative",
+      "name": "Scriptwriting",
+      "status": "planned"
+    },
+    {
+      "category": "Creative",
+      "name": "Content planning",
+      "status": "planned"
+    },
+    {
+      "category": "Creative",
+      "name": "YouTube metadata generation",
+      "status": "planned"
+    },
+    {
+      "category": "Creative",
+      "name": "Creative project management",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Workout planning",
+      "status": "limited"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Workout logging",
+      "status": "limited"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Exercise progress tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Nutrition tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Calorie and macronutrient calculations",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Hydration tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Sleep tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Habit and recovery tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Fitness goal projections",
+      "status": "limited"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Personal health record interpretation",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Health & Fitness",
+      "name": "Health trend summaries",
+      "status": "limited"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Shift-hour calculations",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Overtime estimates",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Work schedule management",
+      "status": "limited"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Timesheet generation",
+      "status": "limited"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Resume creation",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Job research",
+      "status": "planned"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Career planning",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Skill tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Certification planning",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Study scheduling",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Technical troubleshooting assistance",
+      "status": "available"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Equipment maintenance logs",
+      "status": "planned"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Work project documentation",
+      "status": "planned"
+    },
+    {
+      "category": "Work & Career",
+      "name": "Training progress tracking",
+      "status": "planned"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Scheduled automations",
+      "status": "limited"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Recurring automations",
+      "status": "available"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Conditional triggers",
+      "status": "limited"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Event-based workflows",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Multi-step workflows",
+      "status": "limited"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Background execution",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Proactive notifications",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Scheduled research",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Monitoring",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Automated summaries",
+      "status": "planned"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Workflow templates",
+      "status": "planned"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Workflow editing",
+      "status": "available"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Failure recovery",
+      "status": "limited"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Execution history",
+      "status": "available"
+    },
+    {
+      "category": "Automation & Proactivity",
+      "name": "Approval checkpoints",
+      "status": "limited"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Email",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Discord",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Messaging platforms",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Supported phone services",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Google Calendar",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Cloud storage",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Notes and task applications",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "GitHub",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Cloudflare",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Databases",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Financial data connectors",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Fitness data connectors",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Education data connectors",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Custom API connectors",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Integrations & Communication",
+      "name": "Webhooks",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Voice-to-text input",
+      "status": "limited"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Text-to-speech responses",
+      "status": "limited"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Continuous voice conversations",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Hands-free interaction",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Image uploads and interpretation",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Camera-based assistance",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Audio file understanding",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Video file understanding",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Document uploads",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "File generation and downloads",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Voice & Multimodal",
+      "name": "Actionable notifications",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Home dashboard",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Full-featured chat interface",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Searchable tool library",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Workspace navigation",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Goals and projects",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Calendar",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Task manager",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Automation builder",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Notification center",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Memory manager",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Integration manager",
+      "status": "requires-connection"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Appearance and theme controls",
+      "status": "planned"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "AI personality settings",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Model settings",
+      "status": "planned"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Privacy and permission settings",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Activity and execution history",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Backup and restore",
+      "status": "available"
+    },
+    {
+      "category": "Interface & Customization",
+      "name": "Mobile-first PWA",
+      "status": "available"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Authentication",
+      "status": "available"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Authorization",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Tool validation",
+      "status": "available"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Approval system",
+      "status": "planned"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Secret management",
+      "status": "available"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Audit logging",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Data isolation",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Revocation",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Automation limits",
+      "status": "available"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Cost controls",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Error monitoring",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Backups",
+      "status": "limited"
+    },
+    {
+      "category": "Security & Reliability",
+      "name": "Versioning",
+      "status": "available"
+    }
+  ]
+}
