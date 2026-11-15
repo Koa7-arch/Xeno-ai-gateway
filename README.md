@@ -1,23 +1,27 @@
-# XENO Mobile v0.3 — STAGED UPGRADE (do not deploy yet)
+# XENO Mobile v0.7.0 — Complete Replacement Package
 
-This package replaces the gateway repository files and adds `public/` static assets. Existing GitHub Pages remains untouched. Cloudflare Access MUST protect both production and preview Worker URLs before deploying.
+This ZIP contains the entire application source tree (not just patch files), assembled from the previously working v0.6.1 frontend and v0.6 backend plus the v0.7 financial tools and verified tool activity.
 
-## Required Cloudflare Worker settings BEFORE upload
+## Installation
+1. Back up your existing GitHub repository and export XENO conversations from Settings.
+2. In repository `Koa7-arch/Xeno-ai-gateway`, replace the corresponding root files and the files under `public/` with the files in this package. **Preserve the folder structure.**
+3. Keep existing Cloudflare secrets and Access settings. Do not commit API keys.
+4. Deploy via your existing Cloudflare integration.
+5. On iPhone, close and reopen XENO. Check the header version, Tools > Finance & Calculations, and run the smoke tests below.
 
-- Secret `GROQ_API_KEY` — retain existing value.
-- Text `ACCESS_TEAM_DOMAIN` — your Cloudflare Access team domain, e.g. `myteam.cloudflareaccess.com` (no `https://`).
-- Text `ACCESS_AUD` — the Access application **AUD tag** (not its name or ID).
-- The existing `XENO_ACCESS_TOKEN` and `ALLOWED_ORIGIN` may remain in Cloudflare but are not used by v0.3. Do not expose them.
-- Ensure the existing Access application covers **all** Worker URLs and has an Allow policy restricted to your email. Test the Worker in a private tab before uploading.
+## Smoke tests
+- Tools > Finance & Calculations > Overtime: 60 hours, $15/hour, 40-hour threshold, 1.5 multiplier => $1,050 gross.
+- Savings: $3,000 + $500 x 12 periods => $9,000.
+- Percentage change: 100 to 125 => +25%.
+- Chat: Ask XENO to use the calculator to multiply 17 x 23 => 391. A verified tool activity disclosure should appear **only when the backend actually reports a tool call**.
+- Verify existing tasks, approvals, and profile still work.
 
-## Deploy
+## Scope / limitations
+- This is v0.7's expanded-tools and transparency release, **not** cloud memory, Discord, calendar, web research, background push, or voice calling.
+- Tasks, conversations and profiles remain device-local. Back up before clearing browser data.
+- Calculations are gross estimates and do not access bank accounts.
+- GitHub write access is unavailable to this assistant, so this package is NOT deployed.
+- Static syntax checks were run; live Cloudflare/iPhone behavior must be verified after installation.
 
-Only after the two new variables are configured, upload the contents of this package to the private `Xeno-ai-gateway` GitHub repository, preserving `public/` as a directory. GitHub-connected Cloudflare deployment should start automatically. Confirm `/health` returns version `0.3` after Access login. Then visit the Worker root `/` in Safari, sign in if prompted, test chat, and use Safari Share > Add to Home Screen for a **new** installation. Do not delete the old GitHub Pages installation yet.
-
-## Notes
-
-- Chat history stays in each origin's localStorage; it does not automatically migrate from GitHub Pages.
-- Cloudflare Access email login and PWA cookie/session behavior on iPhone require real-device testing.
-- The Worker verifies Access JWT signatures with Cloudflare's public JWKS and checks issuer, audience, and expiry. It fails closed if settings are missing.
-- This is a personal hobby prototype, not a production-hardened service. Add Cloudflare rate limiting/usage limits before heavy usage.
-- Service worker caches only approved static assets after checking response content type; API responses are never cached.
+## Rollback
+Restore your prior repository commit and redeploy. Existing localStorage data is not intentionally migrated or deleted by this package.
