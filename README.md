@@ -1,12 +1,30 @@
-# XENO v0.9.1 — Category Tool UI Fix (Full Replacement)
+# XENO v0.9.2 — Category navigation repair
 
-Fixes v0.9 tools being relegated to a JSON tester. The AI tools now appear as runnable input forms inside Organization, Work & Field, Finance, Learning, Projects, Health & Fitness, and Creative. Integrations remains explicitly unconnected.
+This is a **targeted replacement** for the existing v0.9.1 installation.
 
-## Install
-1. Back up XENO conversations. Do not clear browser/PWA data.
-2. Replace repository files with all files in this ZIP, preserving paths.
-3. Commit and allow Cloudflare to deploy.
-4. Close/reopen the iPhone PWA and confirm version 0.9.1.
-5. Go to Tools, tap Finance, expand Overtime Pay, run 60 hours at $15, threshold 40, multiplier 1.5. Expected grossPay: 1050.
+Replace the following files in the GitHub repository, preserving their paths:
 
-The forms call the existing authenticated /tools/run endpoint. No external service connections or autonomous actions are added. Task proposals still require approval. Existing tools and profile/local conversations are preserved. Some tools appear in multiple relevant categories; they are the same backend operation.
+- `public/index.html`
+- `public/xeno-violet.js`
+- `public/xeno-tool-suite-v09.js`
+- `public/sw.js`
+
+Do not upload the ZIP itself. Commit the four files and wait for Cloudflare deployment.
+
+## What changed
+- Removed legacy category click handlers and misleading “More tools planned” badges.
+- Each category opens its own focused tool page in place of the card grid.
+- All direct backend tools are available as input forms within their appropriate category.
+- The old generic tester and duplicate legacy forms are hidden.
+- Integrations accurately reports that no external integrations are connected.
+- Header version and script URLs updated to v0.9.2.
+
+## Verify
+1. Refresh XENO and confirm header says `v0.9.2`.
+2. Tap Tools → Finance → Overtime Pay.
+3. Enter 60 hours at $15/hour, 40-hour threshold, 1.5 multiplier. Expect $1,050 gross.
+4. Tap “All categories” and test Work & Field → Work Shift Hours.
+
+If the header still says v0.9.0 or v0.9.1, the new frontend has not been served; check Cloudflare deployment and GitHub branch before changing code again.
+
+No paid integrations or permission changes are introduced. Live deployment is not confirmed by this package.
