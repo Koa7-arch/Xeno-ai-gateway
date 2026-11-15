@@ -5,7 +5,7 @@ const CHAT_KEY='xeno-mobile-chats-v04';
 const area=document.getElementById('messages');
 if(!area)return;
 const originalFetch=window.fetch.bind(window);
-const allowed=new Set(['calculate','convert_units','date_difference','propose_task']);
+const allowed=new Set(['calculate','convert_units','date_difference','estimate_overtime_pay','savings_projection','percentage_change','propose_task']);
 let latest=null;
 function active(){try{const s=JSON.parse(localStorage.getItem(CHAT_KEY)||'null');return s?.activeId||null}catch{return null}}
 function read(){try{const v=JSON.parse(localStorage.getItem(KEY)||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}catch{return {}}}
