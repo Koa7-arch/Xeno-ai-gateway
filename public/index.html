@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="shell">
-<header><div><h1>XENO</h1><small>MOBILE / v0.9.2 <span class="tag" id="status">● CONNECTING</span></small></div><div class="actions"><button id="chatsButton" class="secondary">Conversations</button><button id="profileButton" class="secondary">Profile</button><button id="settingsButton" class="secondary" aria-label="Settings">⚙</button></div></header>
+<header><div><h1>XENO</h1><small>MOBILE / v1.0.0 <span class="tag" id="status">● CONNECTING</span></small></div><div class="actions"><button id="chatsButton" class="secondary">Conversations</button><button id="profileButton" class="secondary">Profile</button><button id="settingsButton" class="secondary" aria-label="Settings">⚙</button></div></header>
 <section id="settings" class="panel hidden"><strong>Settings</strong><p>Conversations are saved locally on this device. Export backups regularly. Local storage is not synchronized between installations or devices.</p><div class="actions"><button id="exportButton">Export JSON backup</button><button id="importButton" class="secondary">Import JSON backup</button><button id="closeSettings" class="secondary">Close</button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden"><p>Imported backups merge by conversation ID. Existing chats are not overwritten.</p><p>Your v0.5 profile is stored separately and is not included in v0.4 conversation backups.</p><div class="awareness-settings"><strong>Profile Awareness</strong><p>When enabled, selected profile categories are sent to Groq with each chat request. Turn off any category you do not want shared. Changes are saved on this device.</p><label class="awareness-option"><input type="checkbox" id="awarenessEnabled"> Enable Profile Awareness</label><div id="awarenessCategories"></div><p id="awarenessStatus" class="profile-status" role="status" aria-live="polite"></p></div></section>
 <section id="errorNotice" class="notice hidden" role="alert"></section>
 <main id="chatView" class="view"><div id="messages" class="messages" aria-live="polite"></div></main>
@@ -116,6 +116,7 @@ form.addEventListener('submit',async event=>{
     const messages=chat.messages.filter(m=>m.role==='user'||m.role==='assistant').slice(-20).map(m=>({role:m.role,content:m.text}));
     const payload={provider:'groq',messages};
     if(shared)payload.profile=shared;
+    if(window.XENO_UNIFIED?.context)payload.workspace=window.XENO_UNIFIED.context();
     const response=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(payload)});
     const data=await response.json();if(!response.ok)throw Error(data.error||'Gateway error');
     chat.messages.push({role:'assistant',text:data.reply||'No response received.'});
@@ -220,5 +221,7 @@ loadAwareness();renderAwareness();show('chat');checkHealth();initializeProfile()
 <script src="./xeno-finance-v07.js?v=080"></script>
 <script src="./xeno-tool-engine-v08.js?v=080"></script>
 <script src="./xeno-tool-suite-v09.js?v=092"></script>
+<link rel="stylesheet" href="./xeno-unified-v10.css?v=100">
+<script src="./xeno-unified-v10.js?v=100"></script>
 </body>
 </html>
