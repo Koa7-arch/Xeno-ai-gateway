@@ -1,32 +1,33 @@
-# XENO v1.0.1 — Integrated Stable Release (candidate)
+# XENO v1.2.0 — Capability Inventory & Integrated Core
 
-This replaces the v1.0 frontend while preserving the existing Groq/Cloudflare Worker, existing local chat/profile storage keys, 15 direct deterministic tools, and AI task proposal approval.
+This is a **full repository replacement ZIP** based on the v1.0.1 source snapshot. It retains the existing Groq chat, Cloudflare Access gateway, 15 deterministic tools, task proposals, adaptive workspaces, goals, and local on-open reminders.
 
-## Fixes
-- Chat composer is recovered when navigating from Home, Manage, Memory, Tools, or Conversations to Chat; iPhone-safe layout and 16px input.
-- All 15 executable deterministic tools remain grouped in category pages with readable outputs. Duplicate tools across categories are intentional.
-- Organization category links to the existing task manager and approval area; it is not a new backend action.
-- Memory navigation exposes existing conversations and profile instead of nonfunctional Soon buttons.
-- Existing adaptive workspaces, goals, settings, local on-open reminders, and data backup remain intact.
-- Header version is v1.0.1. This is a candidate release until live iPhone testing is completed.
+## What v1.2 actually adds
 
-## Install
-1. Back up conversations (Settings → Export), profile and unified data (Manage → Settings → Export unified data).
-2. Upload/replace the contents of this ZIP into the root of the existing GitHub repo, **not the ZIP itself**. Preserve `public/` and the root Worker files.
-3. Commit and wait for Cloudflare deployment. Ensure the build points to the correct branch and repository.
-4. Reload XENO, confirm header v1.0.1, and test the acceptance checklist.
+- A searchable, categorized master inventory of **all requested capabilities** with explicit status.
+- A copyable system acceptance prompt inside the Capability Center.
+- Clear distinction between implemented, partial, integration-required, and not-implemented items.
+- A new service-worker cache namespace.
 
-## Acceptance tests
-1. Home → Chat: input and Send visible above bottom navigation. Type and send a message.
-2. Chat → Manage → Chat: input still visible. Repeat from Tools, Memory, Conversations.
-3. Tools → Finance → Overtime Pay: 60 hours, $15/hour, 40-hour threshold, 1.5 multiplier = **$1,050 gross**, readable result.
-4. Tools → Work & Field → Work Shift Hours: 05:30 to 17:30, 30-minute break = **11.5 paid hours**.
-5. Tools → Organization → Open task manager: create a local task; confirm it appears on Home.
-6. Manage → Workspaces: create a workspace, add goal, switch focus, and test chat context sharing setting.
-7. Manage → Automations: create a reminder, verify it only triggers when app opens; pause/delete.
-8. Export a backup before testing import; verify old conversations remain.
+**It does not magically implement every item in the roadmap.** Live search, document/media analysis, voice, cloud background automations, external APIs, iPhone push, and payment or financial account actions require separate implementations, permissions, and often provider credentials. Do not use the catalog as evidence that these are functional.
 
-## Scope and limitations
-This is the complete **offline/local core plus existing AI gateway and deterministic tools**, not a finished general-purpose ChatGPT equivalent. No web search, file uploads/analysis, image understanding, email, Discord, external calendars, real background jobs, push notifications, or voice conversation are implemented. These require additional integration, consent, credentials and/or infrastructure. Do not enter real financial or personal secrets into unconnected tools. Existing memory is local profile/conversations; no new cloud memory was added.
+## Deploy
 
-No new paid services, permissions, or autonomous external actions are introduced. Test against the live deployment before considering it production-ready.
+1. Back up conversations and unified workspace data in XENO.
+2. Upload the files in this ZIP to the root of the existing GitHub repository, preserving paths.
+3. Do not upload the ZIP itself as a repository file.
+4. Commit and wait for Cloudflare to deploy.
+5. Refresh XENO; open **Capabilities** from the navigation.
+6. Copy the acceptance prompt and run it in Chat. Test individual category tools as well.
+
+## Important limitations
+
+- Local storage is device/browser scoped; it is not cloud-synced memory.
+- On-open reminders do not execute when the browser is closed.
+- Task proposals require explicit approval; a proposal is not a completed task.
+- Inventory status is a conservative development estimate, not a substitute for device-level acceptance tests.
+- API costs depend on your existing Groq usage and limits. No new paid provider is configured.
+
+## Rollback
+
+Revert the GitHub commit and redeploy. Keep your local backups.
