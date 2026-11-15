@@ -69,7 +69,18 @@ $('newChatButton').addEventListener('click',()=>{if(!chat.classList.contains('hi
 $('toolsButton').addEventListener('click',()=>{for(const el of [home,memory])el.classList.add('hidden');syncNav('tools')});
 $('toolsBack').addEventListener('click',()=>{setTimeout(()=>showPage('chat'),0)});
 // Transform long tools list into focused, expandable groups; original forms and listeners stay in place.
-const grid=tools.querySelector('.tools-grid');if(grid){const cards=[...grid.querySelectorAll(':scope > .tools-card')];const items=[['Organization','Tasks and approval requests',[3,4,5]],['Finance & calculations','Calculator and unit conversion',[0,1]],['Planning','Date difference',[2]]];for(const [name,desc,indexes] of items){const d=document.createElement('details');d.className='x-tool-category';d.innerHTML=`<summary>${name}</summary><p class="x-cat-desc">${desc}</p>`;for(const i of indexes)if(cards[i])d.append(cards[i]);grid.append(d)}const intro=document.createElement('div');intro.className='x-category-grid';for(const [name,glyph,detail,target] of categories){const b=document.createElement('button');b.className='x-category';b.type='button';b.innerHTML=`<span class="x-glyph">${icon(glyph)}</span><strong>${name}</strong><small>${detail}</small>${target?'':'<span class="x-coming">More tools planned</span>'}`;b.addEventListener('click',()=>{if(!target){alert('This category is planned. Existing tools remain available below.');return}const detailEl=grid.querySelectorAll('.x-tool-category')[target==='task'?0:1];detailEl.open=true;const destination=target==='task'?$('toolTask'):$('toolCalc');(destination||detailEl).scrollIntoView({behavior:'smooth',block:'start'})});intro.append(b)}grid.parentNode.insertBefore(intro,grid);const title=document.createElement('div');title.className='x-section-head';title.innerHTML='<strong>Available tools</strong><span>Tap a group to expand</span>';grid.parentNode.insertBefore(title,grid)}
+// v0.9.2: category cards are navigation only. The tool suite owns their actions.
+const grid=tools.querySelector('.tools-grid');
+if(grid){
+  const intro=document.createElement('div');intro.className='x-category-grid';
+  for(const [name,glyph,detail] of categories){
+    const b=document.createElement('button');b.className='x-category';b.type='button';
+    b.dataset.category=name;
+    b.innerHTML=`<span class="x-glyph">${icon(glyph)}</span><strong>${name}</strong><small>${detail}</small>`;
+    intro.append(b);
+  }
+  grid.parentNode.insertBefore(intro,grid);
+}
 const today=new Date();$('xDate').textContent=today.toLocaleDateString(undefined,{month:'short',day:'numeric'});const hour=today.getHours();$('xHello').textContent=`Good ${hour<12?'morning':hour<17?'afternoon':'evening'}.`;
 // Status is truthful: online AI does not imply all tools are operational.
 async function checkTools(){try{const r=await fetch('/health',{cache:'no-store'});$('xSystemStatus').textContent=r.ok?'Gateway responding':'Gateway unavailable';$('xToolStatus').textContent=r.ok?'✓':'?'}catch{$('xSystemStatus').textContent='Offline';$('xToolStatus').textContent='?'}}
