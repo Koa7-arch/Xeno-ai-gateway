@@ -8,7 +8,7 @@ const groups={
  'Finance':['calculate','estimate_overtime_pay','savings_projection','percentage_change','loan_payment','goal_timeline','compound_growth','budget_summary','split_expense'],
  'Learning':['text_statistics','percentage_change','convert_units'],
  'Projects':['date_difference','date_offset','percentage_change'],
- 'Health & Fitness':['date_difference','percentage_change'],
+ 'Health & Fitness':['percentage_change','date_difference'],
  'Creative':['text_statistics'],
  'Integrations':[]
 };
@@ -50,7 +50,15 @@ function openCategory(category){
   else if(!catalog)status.textContent='Tool catalog unavailable. Check that the v0.9 backend is deployed.';
   else {let count=0;for(const id of ids){const tool=catalog.find(t=>t.name===id&&t.direct);if(tool){contents.append(build(id,tool.description));count++}}
     status.textContent=count?`${count} available tools. Select one to open its form.`:'No executable tools returned for this category.';
-    if(category==='Organization'){const note=document.createElement('p');note.textContent='Task proposals require approval. Manage existing tasks through the organization interface.';contents.prepend(note)}
+    if(category==='Organization'){
+      const note=document.createElement('p');note.textContent='Tasks and approvals are managed locally. AI proposals require your review.';contents.prepend(note);
+      const actions=document.createElement('div');actions.className='x-v101-actions';
+      const openTask=document.createElement('button');openTask.type='button';openTask.textContent='Open task manager';
+      openTask.addEventListener('click',()=>{const legacy=document.getElementById('toolTask');if(!legacy)return;grid.hidden=false;legacy.hidden=false;legacy.scrollIntoView({block:'center'});legacy.querySelector('input,button')?.focus()});
+      const openApprovals=document.createElement('button');openApprovals.type='button';openApprovals.textContent='Review approvals';openApprovals.className='secondary';
+      openApprovals.addEventListener('click',()=>{const legacy=document.getElementById('toolTask');if(!legacy)return;grid.hidden=false;legacy.hidden=false;legacy.scrollIntoView({block:'center'});legacy.querySelector('button')?.focus()});
+      actions.append(openTask,openApprovals);contents.prepend(actions)
+    }
   }
   panel.scrollIntoView({block:'start',behavior:'instant'});
 }
