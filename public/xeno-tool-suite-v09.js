@@ -1,4 +1,4 @@
-/* XENO v0.9.1: real categorized, form-driven AI tools. */
+/* XENO v0.9.3: categorized tools with human-readable results. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id),view=$('toolsView');if(!view)return;
 const grid=view.querySelector('.tools-grid'),intro=view.querySelector('.x-category-grid');if(!grid||!intro)return;
@@ -36,7 +36,12 @@ const css=document.createElement('style');css.textContent=`
 #toolsView .x-v091-tool label{display:block;font-size:12px;color:#d8c4eb;margin:10px 0}
 #toolsView .x-v091-tool input,#toolsView .x-v091-tool textarea,#toolsView .x-v091-tool select{display:block;width:100%;min-width:0;margin-top:5px;background:#120d1d;color:#f5eaff;border:1px solid #684b81;border-radius:10px;padding:11px;font:inherit}
 #toolsView .x-v091-tool output{display:block;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:12px;padding:12px;border:1px solid #5b3d77;border-radius:10px;background:#150d20}
-#toolsView .x-v091-tool output[hidden]{display:none}`;document.head.append(css);
+#toolsView .x-v091-tool output[hidden]{display:none}
+#toolsView .x-v093-headline{display:block;font-size:1.25rem;line-height:1.4;color:#f6eaff;margin-bottom:8px}
+#toolsView .x-v093-line{margin:6px 0;font-size:.92rem;color:#e5d7f2;line-height:1.5}
+#toolsView .x-v093-technical{margin-top:16px;padding-top:12px;border-top:1px solid #4b355f}
+#toolsView .x-v093-technical summary{font-size:.8rem;color:#bba4d0}
+#toolsView .x-v093-technical pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.76rem;max-height:260px;overflow:auto}`;document.head.append(css);
 let catalog=null;
 function openCategory(category){
   intro.hidden=true;panel.hidden=false;heading.textContent=category;contents.replaceChildren();
@@ -51,11 +56,44 @@ function openCategory(category){
 }
 for(const button of intro.querySelectorAll('[data-category]'))button.addEventListener('click',()=>openCategory(button.dataset.category));
 back.addEventListener('click',()=>{panel.hidden=true;intro.hidden=false;intro.scrollIntoView({block:'start',behavior:'instant'})});
-const pretty=x=>JSON.stringify(x,null,2);
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+const number=n=>new Intl.NumberFormat('en-US',{maximumFractionDigits:6}).format(n);
+const fmt=(n,unit='')=>number(n)+(unit?' '+unit:'');
+const readable=(name,r,args)=>{
+  const lines=[];let headline='Result';
+  switch(name){
+    case 'calculate':headline=fmt(r.value,r.unit||'');lines.push('Calculation: '+r.expression);break;
+    case 'convert_units':headline=fmt(r.value,r.to);lines.push(`${fmt(r.input,r.from)} equals ${headline}.`);break;
+    case 'date_difference':headline=fmt(r.absoluteDays,'days');lines.push(`From ${r.start} to ${r.end}: ${fmt(r.days,'days')} (signed).`);break;
+    case 'estimate_overtime_pay':headline=money(r.grossPay);lines.push(`Regular: ${fmt(r.regularHours,'hours')} — ${money(r.regularPay)}`,`Overtime: ${fmt(r.overtimeHours,'hours')} — ${money(r.overtimePay)}`);break;
+    case 'savings_projection':headline=money(r.projectedBalance);lines.push(`Starting balance: ${money(r.startingBalance)}`,`Added over ${fmt(r.periods,'periods')}: ${money(r.totalContributions)}`);break;
+    case 'percentage_change':headline=fmt(r.percentageChange,'%');lines.push(`Change: ${fmt(r.difference)} (from ${fmt(r.original)} to ${fmt(r.newValue)})`);break;
+    case 'loan_payment':headline=money(r.monthlyPayment)+' per month';lines.push(`Total repayment: ${money(r.totalRepaid)}`,`Total interest: ${money(r.totalInterest)}`);break;
+    case 'goal_timeline':headline=fmt(r.periods,'contribution periods');lines.push(`Remaining to save: ${money(r.remaining)}`,`Balance after reaching goal: ${money(r.projectedBalance)}`);break;
+    case 'compound_growth':headline=money(r.projectedBalance);lines.push(`Total new deposits: ${money(r.totalDeposits)}`,`Estimated growth: ${money(r.estimatedGrowth)}`,`Contribution periods: ${fmt(r.periods)}`);break;
+    case 'budget_summary':headline=money(r.remaining)+' remaining';lines.push(`Total spending and planned savings: ${money(r.totalOutflows)}`,`Planned savings rate: ${r.savingsRatePercent===null?'Not applicable':fmt(r.savingsRatePercent,'%')}`);break;
+    case 'fuel_trip_estimate':headline=money(r.estimatedFuelCost);lines.push(`Estimated fuel used: ${fmt(r.gallons,'gallons')}`);break;
+    case 'work_shift_hours':headline=fmt(r.paidHours,'paid hours');lines.push(`Total shift: ${fmt(r.shiftHours,'hours')}`,r.overnight?'This shift crosses midnight.':'This shift ends on the same day.');break;
+    case 'date_offset':headline=r.date;lines.push(`${args.days>=0?'Added':'Subtracted'} ${fmt(Math.abs(r.days),'days')} ${args.days>=0?'to':'from'} ${args.date}.`);break;
+    case 'split_expense':headline=money(r.perPerson)+' per person';lines.push(`Total bill: ${money(r.total)}`,`Tip: ${money(r.tip)}`);break;
+    case 'text_statistics':headline=fmt(r.words,'words');lines.push(`${fmt(r.characters,'characters')} · ${fmt(r.lines,'lines')}`);break;
+    default:headline='Completed';for(const [key,value] of Object.entries(r))if(typeof value!=='object')lines.push(`${key}: ${value}`);
+  }
+  if(r.disclaimer)lines.push(r.disclaimer);
+  if(r.assumptions)lines.push(typeof r.assumptions==='string'?r.assumptions:Object.entries(r.assumptions).map(([k,v])=>`${k.replaceAll('_',' ')}: ${v}`).join(' · '));
+  return {headline,lines};
+};
+function showResult(output,name,result,args){
+  const {headline,lines}=readable(name,result,args);
+  output.replaceChildren();
+  const title=document.createElement('strong');title.className='x-v093-headline';title.textContent=headline;output.append(title);
+  for(const line of lines){const p=document.createElement('p');p.className='x-v093-line';p.textContent=line;output.append(p)}
+  const details=document.createElement('details');details.className='x-v093-technical';const summary=document.createElement('summary');summary.textContent='Technical details';const pre=document.createElement('pre');pre.textContent=JSON.stringify(result,null,2);details.append(summary,pre);output.append(details);
+}
 function build(name,description){const outer=document.createElement('details');outer.className='x-v091-tool';outer.dataset.tool=name;const summary=document.createElement('summary');summary.textContent=names[name]||name.replaceAll('_',' ');const desc=document.createElement('p');desc.textContent=description;const form=document.createElement('form');const args=examples[name]||{};
 for(const [key,value] of Object.entries(args)){const label=document.createElement('label');label.textContent=key.replaceAll('_',' ');let input;if(typeof value==='string'&&value.length>80){input=document.createElement('textarea');input.rows=3}else{input=document.createElement('input');input.type=typeof value==='number'?'number':'text';if(typeof value==='number')input.step='any';}input.name=key;input.value=String(value);input.required=true;label.append(input);form.append(label)}
 const btn=document.createElement('button');btn.type='submit';btn.textContent='Run tool';const output=document.createElement('output');output.hidden=true;output.setAttribute('aria-live','polite');form.append(btn,output);outer.append(summary,desc,form);
-form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const params={};for(const [key,value] of new FormData(form)){const v=args[key];params[key]=typeof v==='number'?Number(value):String(value)};btn.disabled=true;output.hidden=false;output.textContent='Running…';try{const r=await fetch('/tools/run',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool:name,args:params})});const data=await r.json();if(!r.ok||data.result?.error)throw Error(data.error||data.result?.error||'Tool execution failed');output.textContent=pretty(data.result)}catch(err){output.textContent='Error: '+err.message}finally{btn.disabled=false}});return outer;}
+form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const params={};for(const [key,value] of new FormData(form)){const v=args[key];params[key]=typeof v==='number'?Number(value):String(value)};btn.disabled=true;output.hidden=false;output.textContent='Running…';try{const r=await fetch('/tools/run',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool:name,args:params})});const data=await r.json();if(!r.ok||data.result?.error)throw Error(data.error||data.result?.error||'Tool execution failed');showResult(output,name,data.result,params)}catch(err){output.textContent='Error: '+err.message}finally{btn.disabled=false}});return outer;}
 fetch('/tools/catalog',{credentials:'same-origin',cache:'no-store'})
   .then(r=>{if(!r.ok)throw Error('Catalog HTTP '+r.status);return r.json()})
   .then(data=>{catalog=Array.isArray(data.tools)?data.tools:[];if(!panel.hidden)openCategory(heading.textContent)})
