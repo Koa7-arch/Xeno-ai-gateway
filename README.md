@@ -1,33 +1,32 @@
-# XENO v1.0 — Unified Adaptive Core
+# XENO v1.0.1 — Integrated Stable Release (candidate)
 
-## Deployment
-1. Export your existing XENO conversation backup and save your profile separately. Export the v1.0 unified data after first use.
-2. Upload **all files in this archive** to the root of `Koa7-arch/Xeno-ai-gateway`, preserving paths. Replace existing files. Do not delete unrelated repository files.
-3. Commit and wait for the existing Cloudflare Workers GitHub deployment.
-4. Open XENO, confirm `v1.0.0` and `/health` reports `1.0.0`. Open **Manage** in bottom navigation or **Workspaces & Automations** on Home.
-5. Create a workspace, set goals, switch focus, adjust settings, test a tool, and send a chat message.
+This replaces the v1.0 frontend while preserving the existing Groq/Cloudflare Worker, existing local chat/profile storage keys, 15 direct deterministic tools, and AI task proposal approval.
 
-## Features
-- Preserves v0.9.3 Groq chat, 16 tool definitions (15 direct tools + task proposal), category tools, and existing local conversation/profile storage.
-- Adds active workspaces, goals, user-adjustable style, local activity log, workspace backup/import, and user-controlled sharing of workspace context to the chat backend.
-- Adds local on-open reminders and optional creation of local tasks. **These do not run in the background**. No remote notifications, external account actions, or scheduled Cloudflare execution are included.
-- Explicitly displays unavailable integration capabilities. No new paid services or secrets.
+## Fixes
+- Chat composer is recovered when navigating from Home, Manage, Memory, Tools, or Conversations to Chat; iPhone-safe layout and 16px input.
+- All 15 executable deterministic tools remain grouped in category pages with readable outputs. Duplicate tools across categories are intentional.
+- Organization category links to the existing task manager and approval area; it is not a new backend action.
+- Memory navigation exposes existing conversations and profile instead of nonfunctional Soon buttons.
+- Existing adaptive workspaces, goals, settings, local on-open reminders, and data backup remain intact.
+- Header version is v1.0.1. This is a candidate release until live iPhone testing is completed.
 
-## Privacy and limitations
-- Workspace and automation data is saved to browser localStorage on the current device. It is not cross-device cloud memory. Clearing site data deletes it without a backup.
-- Workspace context is sent to Groq **only if** workspace context sharing is enabled and a chat message is sent. This is separate from existing profile awareness.
-- Automation scheduling is device-local and checks when the app loads; it does not guarantee on-time background execution. Recurring reminders skip missed intervals.
-- Existing profile and conversations have separate export/import systems.
-- This is a unified **core**, not a claim of completed email, calendar, web search, voice, push, or background automation integrations.
-- Keep Cloudflare Access configured; `GROQ_API_KEY`, `ACCESS_TEAM_DOMAIN`, and `ACCESS_AUD` remain required.
+## Install
+1. Back up conversations (Settings → Export), profile and unified data (Manage → Settings → Export unified data).
+2. Upload/replace the contents of this ZIP into the root of the existing GitHub repo, **not the ZIP itself**. Preserve `public/` and the root Worker files.
+3. Commit and wait for Cloudflare deployment. Ensure the build points to the correct branch and repository.
+4. Reload XENO, confirm header v1.0.1, and test the acceptance checklist.
 
-## Smoke test
-1. `/health` shows version `1.0.0`.
-2. Finance → Overtime Pay returns readable `$1,050` for 60 hours at $15/hr, 40h threshold, 1.5×.
-3. Create two workspaces; switch focus and confirm independent goals.
-4. Enable workspace context sharing; ask XENO which workspace is active. Disable it and verify it is no longer transmitted in chat requests.
-5. Create a local reminder due in one minute, close and reopen the app after it is due; confirm activity log records the trigger.
-6. Export unified data and preserve your conversation backup.
+## Acceptance tests
+1. Home → Chat: input and Send visible above bottom navigation. Type and send a message.
+2. Chat → Manage → Chat: input still visible. Repeat from Tools, Memory, Conversations.
+3. Tools → Finance → Overtime Pay: 60 hours, $15/hour, 40-hour threshold, 1.5 multiplier = **$1,050 gross**, readable result.
+4. Tools → Work & Field → Work Shift Hours: 05:30 to 17:30, 30-minute break = **11.5 paid hours**.
+5. Tools → Organization → Open task manager: create a local task; confirm it appears on Home.
+6. Manage → Workspaces: create a workspace, add goal, switch focus, and test chat context sharing setting.
+7. Manage → Automations: create a reminder, verify it only triggers when app opens; pause/delete.
+8. Export a backup before testing import; verify old conversations remain.
 
-## Rollback
-Restore the v0.9.3 files from your GitHub commit history. Existing local conversation/profile storage keys were not changed.
+## Scope and limitations
+This is the complete **offline/local core plus existing AI gateway and deterministic tools**, not a finished general-purpose ChatGPT equivalent. No web search, file uploads/analysis, image understanding, email, Discord, external calendars, real background jobs, push notifications, or voice conversation are implemented. These require additional integration, consent, credentials and/or infrastructure. Do not enter real financial or personal secrets into unconnected tools. Existing memory is local profile/conversations; no new cloud memory was added.
+
+No new paid services, permissions, or autonomous external actions are introduced. Test against the live deployment before considering it production-ready.
