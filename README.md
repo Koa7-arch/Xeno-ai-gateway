@@ -1,22 +1,12 @@
-# XENO v0.9.0 — AI-Callable Tool Suite
+# XENO v0.9.1 — Category Tool UI Fix (Full Replacement)
 
-Full replacement source package based on v0.8.0. Replace matching files in the GitHub repository while retaining the directory structure. Export your conversation backup first. Keep Cloudflare secrets and Access configuration unchanged.
+Fixes v0.9 tools being relegated to a JSON tester. The AI tools now appear as runnable input forms inside Organization, Work & Field, Finance, Learning, Projects, Health & Fitness, and Creative. Integrations remains explicitly unconnected.
 
-## Included
+## Install
+1. Back up XENO conversations. Do not clear browser/PWA data.
+2. Replace repository files with all files in this ZIP, preserving paths.
+3. Commit and allow Cloudflare to deploy.
+4. Close/reopen the iPhone PWA and confirm version 0.9.1.
+5. Go to Tools, tap Finance, expand Overtime Pay, run 60 hours at $15, threshold 40, multiplier 1.5. Expected grossPay: 1050.
 
-15 direct, deterministic calculation/utility tools (the existing six plus nine new tools; see `/tools/catalog`), plus `propose_task` (approval-only). The new tools: loan_payment, goal_timeline, compound_growth, budget_summary, fuel_trip_estimate, work_shift_hours, date_offset, split_expense, text_statistics. AI multi-round execution and tool activity are preserved. The new Tools screen panel has a JSON argument tester for all direct tools and a searchable catalog; the existing guided finance forms remain available.
-
-## Deployment
-
-1. In XENO, export a JSON conversation backup.
-2. Unzip and upload all project files to `Koa7-arch/Xeno-ai-gateway` (replace matching paths). Do not put files under an extra enclosing folder.
-3. Commit and allow Cloudflare Workers to redeploy.
-4. Open XENO from its Home Screen shortcut; refresh/relaunch if the old build is cached.
-5. Check `/health` (authenticated), then Tools > AI Tool Suite.
-6. Test the example in the suite, then ask XENO to use `loan_payment` and `goal_timeline` in one conversation.
-
-## Security and boundaries
-
-No browsing, email, calendar, device, bank, Discord, phone calls, or notifications are claimed. No arbitrary network fetch, code execution, or external side effects. `propose_task` does not create a task without approval. Existing local memory/profile/conversations are not migrated or overwritten by this source update. All financial outputs are estimates, not professional advice. No new paid services.
-
-The suite is a substantial set of *local deterministic tools*, not literally every conceivable AI capability. External integrations and actions require separate authenticated connectors and permission design.
+The forms call the existing authenticated /tools/run endpoint. No external service connections or autonomous actions are added. Task proposals still require approval. Existing tools and profile/local conversations are preserved. Some tools appear in multiple relevant categories; they are the same backend operation.

@@ -209,7 +209,7 @@ export default {
       return json({
         application: 'XENO AI Gateway',
         status: 'online',
-        version: '0.9.0',
+        version: '0.9.1',
         toolEngine: TOOL_ENGINE_VERSION,
         providers: ['groq'],
         profileSupport: true
