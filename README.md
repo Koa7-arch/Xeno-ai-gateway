@@ -1,33 +1,24 @@
-# XENO v1.2.0 — Capability Inventory & Integrated Core
+# XENO v1.2.1 — Conversational Experience Update
 
-This is a **full repository replacement ZIP** based on the v1.0.1 source snapshot. It retains the existing Groq chat, Cloudflare Access gateway, 15 deterministic tools, task proposals, adaptive workspaces, goals, and local on-open reminders.
+Full replacement based on the existing v1.2.0 source snapshot.
 
-## What v1.2 actually adds
+## Implemented
+- Assistant messages render a restricted, escaped Markdown subset: headings, bold, italics, lists, quotes, links, tables, and code fences. User messages remain plain text.
+- Rendering escapes HTML and restricts links to HTTP(S) to avoid executing model-provided HTML.
+- Backend prompt requires human-readable answers rather than internal function-call JSON.
+- If a model outputs a tool-call-shaped text response, the gateway requests one structured retry. It **never executes raw text as a tool call**.
+- Existing Groq gateway, Cloudflare Access, 15 deterministic tools, task proposals, workspaces, and capability catalog remain.
 
-- A searchable, categorized master inventory of **all requested capabilities** with explicit status.
-- A copyable system acceptance prompt inside the Capability Center.
-- Clear distinction between implemented, partial, integration-required, and not-implemented items.
-- A new service-worker cache namespace.
+## Not implemented in this release
+The 207-item inventory is a roadmap, not 207 functional tools. External web search, files, voice, cloud background jobs, notifications and connected accounts are not implemented. Those require real providers, authorization, storage and tests.
 
-**It does not magically implement every item in the roadmap.** Live search, document/media analysis, voice, cloud background automations, external APIs, iPhone push, and payment or financial account actions require separate implementations, permissions, and often provider credentials. Do not use the catalog as evidence that these are functional.
+## Install
+Back up XENO local data first. Upload the ZIP contents to the root of GitHub preserving paths, commit and deploy. Test on iPhone. Revert the commit to roll back.
 
-## Deploy
-
-1. Back up conversations and unified workspace data in XENO.
-2. Upload the files in this ZIP to the root of the existing GitHub repository, preserving paths.
-3. Do not upload the ZIP itself as a repository file.
-4. Commit and wait for Cloudflare to deploy.
-5. Refresh XENO; open **Capabilities** from the navigation.
-6. Copy the acceptance prompt and run it in Chat. Test individual category tools as well.
-
-## Important limitations
-
-- Local storage is device/browser scoped; it is not cloud-synced memory.
-- On-open reminders do not execute when the browser is closed.
-- Task proposals require explicit approval; a proposal is not a completed task.
-- Inventory status is a conservative development estimate, not a substitute for device-level acceptance tests.
-- API costs depend on your existing Groq usage and limits. No new paid provider is configured.
-
-## Rollback
-
-Revert the GitHub commit and redeploy. Keep your local backups.
+## Acceptance tests
+1. Ask: "Calculate 60 hours at $15/hr with 1.5x overtime after 40 hours. Explain in a table." Expected gross $1,050, no function JSON.
+2. Ask for a bulleted study plan, headings, a table, and a quoted sentence. Verify rendering.
+3. Ask for a JavaScript example. Code fences should render as code, because code is requested.
+4. Ask: "Write <script>alert(1)</script> literally." It must appear as text, never execute.
+5. Check old conversations still load, input remains visible, and all 15 existing direct tools still run.
+6. Check workspaces, goals, proposals and backup/export.

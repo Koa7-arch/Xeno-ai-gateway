@@ -11,6 +11,7 @@ export async function executeAgentLoop({messages,model,apiKey,toolSchemas,runToo
   const conversation=[...messages];
   const proposals=[],toolActivity=[];
   let total=0;
+  let formatRetryUsed=false;
   const headers={Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'};
   for(let round=1;round<=MAX_ROUNDS;round++){
     const response=await fetchFn('https://api.groq.com/openai/v1/chat/completions',{
@@ -24,6 +25,17 @@ export async function executeAgentLoop({messages,model,apiKey,toolSchemas,runToo
     if(!answer) return err('Empty AI response');
     const calls=answer.tool_calls;
     if(!Array.isArray(calls)||calls.length===0){
+      // Some models print tool-call JSON instead of emitting structured tool_calls.
+      // Never execute untrusted model text. Request one properly structured retry.
+      const looksLikeToolCall=typeof answer.content==='string' &&
+        /["'](?:name|tool)["']\s*:\s*["'](?:functions\.)?[a-z_]+["']/.test(answer.content) &&
+        /["']arguments["']\s*:/.test(answer.content);
+      if(looksLikeToolCall&&!formatRetryUsed&&round<MAX_ROUNDS){
+        formatRetryUsed=true;
+        conversation.push({role:'assistant',content:answer.content.slice(0,2000)});
+        conversation.push({role:'system',content:'Your last reply printed an internal tool invocation. Do not print tool calls. Use structured tool_calls if needed, or provide the verified natural-language answer without claiming execution.'});
+        continue;
+      }
       if(typeof answer.content!=='string'||!answer.content.trim())return err('Empty AI response');
       const pending=proposals.length?'\n\nTask proposal pending — open Tools to review and approve it.':'';
       return {reply:answer.content.slice(0,MAX_REPLY_CHARS)+pending,proposals,toolActivity,
