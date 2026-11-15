@@ -1,28 +1,22 @@
-# XENO Mobile v0.8.0 — Full Replacement
+# XENO v0.9.0 — AI-Callable Tool Suite
 
-This is a complete replacement for the v0.7 repository files, retaining the existing mobile UI, profile, local conversations, task approval inbox, and finance tools. It adds a bounded multi-round AI tool engine and an authenticated tool catalog.
+Full replacement source package based on v0.8.0. Replace matching files in the GitHub repository while retaining the directory structure. Export your conversation backup first. Keep Cloudflare secrets and Access configuration unchanged.
 
-## Installation
-1. In XENO Settings, **export a JSON conversation backup** before updating. Do not clear Safari or PWA site data.
-2. In GitHub `Koa7-arch/Xeno-ai-gateway`, upload all files from this package preserving the directory layout. **Replace** existing files, including `index.js`, `tools-v06-backend.js`, and `public/index.html`. **Add** `tool-engine-v08.js` and `public/xeno-tool-engine-v08.js`.
-3. Commit. Wait for your existing Cloudflare deployment to finish. Do not change existing Cloudflare Access configuration, secrets, or bindings.
-4. On your iPhone, close and reopen XENO. Check header v0.8.0 and Tools > AI Tool Engine. Refresh the tool catalog.
-5. Test: ask XENO to calculate gross earnings for 60 hours at $15 with 1.5× after 40 hours, then project 12 deposits of $500 from a $3000 balance. Expected $1050 gross and $9000 projected balance. Ask it to show both tool results.
+## Included
 
-## What's new
-- Up to **4 tool-call rounds**, **8 total tool calls**, **3 per round**; validated allowlist and JSON arguments; bounded result sizes.
-- A final tool-free synthesis call when the fourth round uses tools, to avoid losing the final answer.
-- `/tools/catalog` authenticated read-only metadata; visible in the Tools workspace.
-- Existing tool activity and task proposals remain compatible with v0.7.
-- All existing v0.7 finance, calculator, conversion, and date tools remain available.
+15 direct, deterministic calculation/utility tools (the existing six plus nine new tools; see `/tools/catalog`), plus `propose_task` (approval-only). The new tools: loan_payment, goal_timeline, compound_growth, budget_summary, fuel_trip_estimate, work_shift_hours, date_offset, split_expense, text_statistics. AI multi-round execution and tool activity are preserved. The new Tools screen panel has a JSON argument tester for all direct tools and a searchable catalog; the existing guided finance forms remain available.
 
-## Security and limits
-- No general shell, browsing, network tool, financial transaction, or autonomous scheduled actions.
-- Task proposals remain **approval-only**, and actual task creation is device-local.
-- Tools are deterministic, not a general autonomous agent; the model chooses which of the existing tools to invoke.
-- Each multi-round request can increase Groq usage and hit free-tier limits. No paid service is added by this package.
-- Local conversations and profile are **not** converted into cloud storage or altered by this release.
-- No live deployment is claimed; validate on your own Cloudflare deployment.
+## Deployment
 
-## Files
-`index.js`, `tool-engine-v08.js`, `tools-v06-backend.js`, `wrangler.jsonc`, `public/` (existing app plus new tool engine UI), and this README.
+1. In XENO, export a JSON conversation backup.
+2. Unzip and upload all project files to `Koa7-arch/Xeno-ai-gateway` (replace matching paths). Do not put files under an extra enclosing folder.
+3. Commit and allow Cloudflare Workers to redeploy.
+4. Open XENO from its Home Screen shortcut; refresh/relaunch if the old build is cached.
+5. Check `/health` (authenticated), then Tools > AI Tool Suite.
+6. Test the example in the suite, then ask XENO to use `loan_payment` and `goal_timeline` in one conversation.
+
+## Security and boundaries
+
+No browsing, email, calendar, device, bank, Discord, phone calls, or notifications are claimed. No arbitrary network fetch, code execution, or external side effects. `propose_task` does not create a task without approval. Existing local memory/profile/conversations are not migrated or overwritten by this source update. All financial outputs are estimates, not professional advice. No new paid services.
+
+The suite is a substantial set of *local deterministic tools*, not literally every conceivable AI capability. External integrations and actions require separate authenticated connectors and permission design.

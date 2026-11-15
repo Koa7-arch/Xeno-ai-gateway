@@ -7,6 +7,15 @@ export const TOOL_SCHEMAS = [
   {type:'function', function:{name:'estimate_overtime_pay',description:'Estimate gross weekly wages with overtime after a configurable threshold. This is not a net-pay or tax estimate.',parameters:{type:'object',additionalProperties:false,properties:{hours:{type:'number'},hourly_rate:{type:'number'},overtime_threshold:{type:'number'},overtime_multiplier:{type:'number'}},required:['hours','hourly_rate']}}},
   {type:'function', function:{name:'savings_projection',description:'Estimate future savings using a starting balance and a fixed contribution per period; excludes interest, inflation and taxes.',parameters:{type:'object',additionalProperties:false,properties:{starting_balance:{type:'number'},contribution_per_period:{type:'number'},periods:{type:'number'}},required:['starting_balance','contribution_per_period','periods']}}},
   {type:'function', function:{name:'percentage_change',description:'Calculate absolute and percentage change from an original value to a new value.',parameters:{type:'object',additionalProperties:false,properties:{original:{type:'number'},new_value:{type:'number'}},required:['original','new_value']}}},
+  {type:'function',function:{name:'loan_payment',description:'Calculate estimated fixed-rate monthly loan payment, total interest, and total repayment. No lending actions.',parameters:{type:'object',additionalProperties:false,properties:{principal:{type:'number'},annual_rate_percent:{type:'number'},months:{type:'integer'}},required:['principal','annual_rate_percent','months']}}},
+  {type:'function',function:{name:'goal_timeline',description:'Calculate the number of contribution periods required to reach a savings target, ignoring interest.',parameters:{type:'object',additionalProperties:false,properties:{current_balance:{type:'number'},target_balance:{type:'number'},contribution_per_period:{type:'number'}},required:['current_balance','target_balance','contribution_per_period']}}},
+  {type:'function',function:{name:'compound_growth',description:'Project compound growth with fixed end-of-period deposits, without taxes or fees.',parameters:{type:'object',additionalProperties:false,properties:{principal:{type:'number'},annual_rate_percent:{type:'number'},periods_per_year:{type:'integer'},years:{type:'number'},deposit_per_period:{type:'number'}},required:['principal','annual_rate_percent','periods_per_year','years','deposit_per_period']}}},
+  {type:'function',function:{name:'budget_summary',description:'Summarize income, fixed costs, variable costs, savings and remaining balance for one period.',parameters:{type:'object',additionalProperties:false,properties:{income:{type:'number'},fixed_costs:{type:'number'},variable_costs:{type:'number'},planned_savings:{type:'number'}},required:['income','fixed_costs','variable_costs','planned_savings']}}},
+  {type:'function',function:{name:'fuel_trip_estimate',description:'Estimate fuel consumption and fuel expense from miles, miles per gallon and price per gallon.',parameters:{type:'object',additionalProperties:false,properties:{miles:{type:'number'},mpg:{type:'number'},price_per_gallon:{type:'number'}},required:['miles','mpg','price_per_gallon']}}},
+  {type:'function',function:{name:'work_shift_hours',description:'Calculate shift hours from 24-hour start/end clock times and unpaid break minutes. Overnight shifts supported.',parameters:{type:'object',additionalProperties:false,properties:{start:{type:'string'},end:{type:'string'},break_minutes:{type:'number'}},required:['start','end','break_minutes']}}},
+  {type:'function',function:{name:'date_offset',description:'Add or subtract calendar days from a YYYY-MM-DD date.',parameters:{type:'object',additionalProperties:false,properties:{date:{type:'string'},days:{type:'integer'}},required:['date','days']}}},
+  {type:'function',function:{name:'split_expense',description:'Split a bill equally, optionally including a percentage tip, across people.',parameters:{type:'object',additionalProperties:false,properties:{subtotal:{type:'number'},tip_percent:{type:'number'},people:{type:'integer'}},required:['subtotal','tip_percent','people']}}},
+  {type:'function',function:{name:'text_statistics',description:'Count words, characters, and lines of user-supplied text. No document access.',parameters:{type:'object',additionalProperties:false,properties:{text:{type:'string'}},required:['text']}}},
   {type:'function', function:{name:'propose_task',description:'Prepare a proposed task for user review. Does NOT create or save a task; user must explicitly approve it.',parameters:{type:'object',additionalProperties:false,properties:{title:{type:'string'},notes:{type:'string'}},required:['title']}}}
 ];
 const finite = value => typeof value==='number' && Number.isFinite(value) && Math.abs(value)<=1e12;
@@ -75,6 +84,66 @@ export function runTool(name,args){
     if(!Number.isFinite(percent)||Math.abs(percent)>1e15)return failure('Result outside supported range');
     return {original,newValue:new_value,difference:round(difference),percentageChange:round(percent),basis:'absolute original value'};
   }
+
+  if(name==='loan_payment'){
+    const {principal,annual_rate_percent,months}=args;
+    if(!finite(principal)||principal<0||principal>1e9||!finite(annual_rate_percent)||annual_rate_percent<0||annual_rate_percent>100||!Number.isInteger(months)||months<1||months>600)return failure('Invalid loan inputs');
+    const r=annual_rate_percent/1200;
+    const payment=r===0?principal/months:principal*r/(1-Math.pow(1+r,-months));
+    return {monthlyPayment:round(payment),totalRepaid:round(payment*months),totalInterest:round(payment*months-principal),disclaimer:'Estimate only; excludes fees, insurance, and variable rates.'};
+  }
+  if(name==='goal_timeline'){
+    const {current_balance,target_balance,contribution_per_period}=args;
+    if(![current_balance,target_balance,contribution_per_period].every(finite)||contribution_per_period<=0)return failure('Invalid goal inputs');
+    const periods=Math.max(0,Math.ceil((target_balance-current_balance)/contribution_per_period));
+    if(periods>1000000)return failure('Goal timeline exceeds supported range');
+    return {periods,remaining:round(Math.max(0,target_balance-current_balance)),projectedBalance:round(current_balance+periods*contribution_per_period),assumptions:'No interest or withdrawals. Period duration is defined by the user.'};
+  }
+  if(name==='compound_growth'){
+    const {principal,annual_rate_percent,periods_per_year,years,deposit_per_period}=args;
+    if(![principal,annual_rate_percent,years,deposit_per_period].every(finite)||principal<0||annual_rate_percent<0||annual_rate_percent>100||!Number.isInteger(periods_per_year)||periods_per_year<1||periods_per_year>365||years<0||years>100||deposit_per_period<0)return failure('Invalid compound growth inputs');
+    const periods=years*periods_per_year;if(!Number.isInteger(periods)||periods>12000)return failure('Use a whole number of contribution periods (max 12000)');
+    const rate=annual_rate_percent/100/periods_per_year;
+    const factor=Math.pow(1+rate,periods);
+    const total=principal*factor+(rate===0?deposit_per_period*periods:deposit_per_period*(factor-1)/rate);
+    if(!Number.isFinite(total)||total>1e15)return failure('Result outside supported range');
+    return {projectedBalance:round(total),totalDeposits:round(deposit_per_period*periods),estimatedGrowth:round(total-principal-deposit_per_period*periods),periods,disclaimer:'Hypothetical constant rate, end-of-period deposits, no taxes or fees.'};
+  }
+  if(name==='budget_summary'){
+    const {income,fixed_costs,variable_costs,planned_savings}=args;
+    if(![income,fixed_costs,variable_costs,planned_savings].every(finite)||[income,fixed_costs,variable_costs,planned_savings].some(v=>v<0))return failure('Invalid budget inputs');
+    return {totalOutflows:round(fixed_costs+variable_costs+planned_savings),remaining:round(income-fixed_costs-variable_costs-planned_savings),savingsRatePercent:income===0?null:round(planned_savings/income*100),disclaimer:'All amounts must use the same time period and currency.'};
+  }
+  if(name==='fuel_trip_estimate'){
+    const {miles,mpg,price_per_gallon}=args;
+    if(![miles,mpg,price_per_gallon].every(finite)||miles<0||mpg<=0||price_per_gallon<0)return failure('Invalid trip inputs');
+    const gallons=miles/mpg;return {gallons:round(gallons),estimatedFuelCost:round(gallons*price_per_gallon),disclaimer:'Does not account for idling, terrain, traffic, or changing fuel prices.'};
+  }
+  if(name==='work_shift_hours'){
+    const parse=t=>{if(typeof t!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(t))return null;const [h,m]=t.split(':').map(Number);return h*60+m};
+    const a=parse(args.start),b=parse(args.end),breakMinutes=args.break_minutes;
+    if(a===null||b===null||!finite(breakMinutes)||breakMinutes<0||breakMinutes>1440)return failure('Invalid shift inputs');
+    const minutes=(b-a+1440)%1440;if(minutes===0)return failure('Start and end times are identical; specify a nonzero shift');
+    if(breakMinutes>minutes)return failure('Break exceeds shift duration');
+    return {shiftHours:round(minutes/60),paidHours:round((minutes-breakMinutes)/60),overnight:b<a,disclaimer:'Clock-time calculation; does not handle daylight-saving transitions.'};
+  }
+  if(name==='date_offset'){
+    const {date,days}=args;
+    if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isInteger(days)||Math.abs(days)>365000)return failure('Invalid date offset inputs');
+    const [y,m,d]=date.split('-').map(Number);const t=Date.UTC(y,m-1,d);const check=new Date(t);
+    if(check.getUTCFullYear()!==y||check.getUTCMonth()!==m-1||check.getUTCDate()!==d)return failure('Invalid calendar date');
+    const out=new Date(t+days*86400000);if(out.getUTCFullYear()<100||out.getUTCFullYear()>9999)return failure('Date outside supported range');
+    return {date:out.toISOString().slice(0,10),days};
+  }
+  if(name==='split_expense'){
+    const {subtotal,tip_percent,people}=args;
+    if(!finite(subtotal)||subtotal<0||!finite(tip_percent)||tip_percent<0||tip_percent>100||!Number.isInteger(people)||people<1||people>10000)return failure('Invalid expense split inputs');
+    const tip=subtotal*tip_percent/100;return {tip:round(tip),total:round(subtotal+tip),perPerson:round((subtotal+tip)/people),disclaimer:'Rounding may create a small difference when collected per person.'};
+  }
+  if(name==='text_statistics'){
+    if(typeof args.text!=='string'||args.text.length>10000)return failure('Text must be at most 10000 characters');
+    const trimmed=args.text.trim();return {characters:args.text.length,words:trimmed?trimmed.split(/\s+/u).length:0,lines:args.text?args.text.split(/\r\n|\r|\n/).length:0};
+  }
   if(name==='propose_task'){
     if(typeof args.title!=='string'||!args.title.trim()||args.title.length>120|| (args.notes!==undefined&&(typeof args.notes!=='string'||args.notes.length>500)))return failure('Invalid task proposal');
     return {proposal:{id:crypto.randomUUID(),type:'create_task',title:args.title.trim(),notes:(args.notes||'').trim(),status:'pending'},message:'Proposal prepared only. Task was NOT saved and requires user approval in the Tools workspace.'};
@@ -90,4 +159,4 @@ export function validateToolRequest(method,request,url){
 }
 
 // Only these deterministic tools may be called directly from the workspace.
-export const DIRECT_TOOLS = new Set(['calculate','convert_units','date_difference','estimate_overtime_pay','savings_projection','percentage_change']);
+export const DIRECT_TOOLS = new Set(['calculate','convert_units','date_difference','estimate_overtime_pay','savings_projection','percentage_change','loan_payment','goal_timeline','compound_growth','budget_summary','fuel_trip_estimate','work_shift_hours','date_offset','split_expense','text_statistics']);

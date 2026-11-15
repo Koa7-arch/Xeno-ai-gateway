@@ -1,5 +1,5 @@
 // XENO v0.8.0 — bounded multi-round tool execution. No arbitrary code or external actions.
-export const TOOL_ENGINE_VERSION='0.8.0';
+export const TOOL_ENGINE_VERSION='0.9.0';
 const MAX_ROUNDS=4, MAX_CALLS=8, MAX_PER_ROUND=3;
 const MAX_ARGUMENT_BYTES=2000;
 const MAX_RESULT_BYTES=3500;
