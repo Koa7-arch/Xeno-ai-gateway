@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {TOOL_SCHEMAS,DIRECT_TOOLS,runTool} from '../tools-v06-backend.js';
+import {validateMessages,planRequest,chat} from '../src/agent.js';
+import {classifyProvider,providerCall} from '../src/providers.js';
+import {CAPABILITY_TO_TOOLS} from '../capability-map-v141.js';
+test('legacy tool registry preserved',()=>{assert.ok(TOOL_SCHEMAS.length>=40);assert.ok(DIRECT_TOOLS.size>=35);for(const t of TOOL_SCHEMAS)assert.equal(typeof t.function.name,'string')});
+test('all mapped capability tool ids exist',()=>{const ids=new Set(TOOL_SCHEMAS.map(x=>x.function.name));for(const names of Object.values(CAPABILITY_TO_TOOLS))for(const name of names)assert.ok(ids.has(name),name)});
+test('deterministic calculations still work',()=>{assert.ok(Math.abs(runTool('circle_geometry',{radius:2}).area-4*Math.PI)<0.00001)});
+test('large requests staged',()=>{assert.equal(planRequest([{role:'user',content:'x'.repeat(19000)}]).large,true);assert.equal(validateMessages([{role:'user',content:'hi'}]),true)});
+test('provider errors classified without secrets',()=>{assert.equal(classifyProvider(401).code,'provider_auth');assert.equal(classifyProvider(429).code,'rate_limited')});
+test('Groq mocked chat',async()=>{const fetchFn=async()=>new Response(JSON.stringify({choices:[{message:{content:'XENO ready'}}]}),{status:200});const r=await chat({messages:[{role:'user',content:'Hi'}],provider:'groq',env:{GROQ_API_KEY:'test-only'},fetchFn});assert.equal(r.reply,'XENO ready')});
+test('Gemini mocked provider',async()=>{const fetchFn=async()=>new Response(JSON.stringify({candidates:[{content:{parts:[{text:'Ready'}]}}]}),{status:200});const r=await providerCall({provider:'gemini',env:{GEMINI_API_KEY:'test-only'},messages:[{role:'user',content:'hi'}],fetchFn});assert.equal(r.content,'Ready')});
