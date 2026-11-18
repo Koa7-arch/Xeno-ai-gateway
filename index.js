@@ -1,3 +1,4 @@
+import { CAPABILITY_TO_TOOLS, COMPLETE_SCOPES, CAPABILITY_TOOL_CATEGORY } from './capability-map-v141.js';
 import { TOOL_SCHEMAS, runTool, validateToolRequest, DIRECT_TOOLS } from './tools-v06-backend.js';
 import { executeAgentLoop, TOOL_ENGINE_VERSION } from './tool-engine-v08.js';
 import { runDiagnostics, DIAGNOSTICS_VERSION } from './diagnostics-v131.js';
@@ -234,7 +235,7 @@ export default {
       return json({
         application: 'XENO AI Gateway',
         status: 'online',
-        version: '1.2.1',
+        version: '1.4.1',
         toolEngine: TOOL_ENGINE_VERSION,
         providers: ['groq'],
         profileSupport: true
@@ -250,6 +251,20 @@ export default {
       catch{return json({error:'Invalid JSON'},400)}
       if(!body||!['quick','full','regression'].includes(body.mode))return json({error:'Invalid diagnostic mode'},400);
       return json(await runDiagnostics({mode:body.mode,runTool,toolSchemas:TOOL_SCHEMAS,engineVersion:TOOL_ENGINE_VERSION,providerConfigured:!!env.GROQ_API_KEY}));
+    }
+
+    if (url.pathname === '/capabilities/verified' && request.method === 'GET') {
+      const diagnostic = await runDiagnostics({mode:'full',runTool,toolSchemas:TOOL_SCHEMAS,engineVersion:TOOL_ENGINE_VERSION,providerConfigured:!!env.GROQ_API_KEY});
+      const results = new Map(diagnostic.tests.map(t=>[t.id,t.status]));
+      const tools = new Set(TOOL_SCHEMAS.filter(t=>DIRECT_TOOLS.has(t.function.name)).map(t=>t.function.name));
+      const capabilities = Object.fromEntries(Object.entries(CAPABILITY_TO_TOOLS).map(([name,ids])=>{
+        const present=ids.filter(id=>tools.has(id));
+        const passed=present.filter(id=>results.get('tool:'+id)==='pass');
+        const failed=present.filter(id=>results.get('tool:'+id)==='fail');
+        const status=failed.length?'failed':passed.length===ids.length?(COMPLETE_SCOPES.has(name)?'verified':'partial'):'partial';
+        return [name,{status,tools:present,verifiedTools:passed,category:CAPABILITY_TOOL_CATEGORY[name]}];
+      }));
+      return json({version:'1.4.1',diagnosticsVersion:diagnostic.diagnosticsVersion,capabilities,summary:diagnostic.counts});
     }
 
     if (url.pathname === '/tools/catalog' && request.method === 'GET') {

@@ -1,24 +1,21 @@
-# XENO v1.4.0 — Expanded Verified Tool Library
+# XENO v1.4.1 — Capability Registry & Tool Access
 
-Full replacement for the existing Cloudflare Worker/GitHub deployment. Based on v1.3.1; preserves chat, Cloudflare Access authentication, existing browser storage, adaptive workspaces, and diagnostics.
+Full replacement of v1.4.0. Upload files to the repository root preserving paths. Back up local app data first.
 
-## Included
+## Changes
+- Added authenticated `GET /capabilities/verified` to associate implemented direct tools with named capabilities and run read-only diagnostic fixtures.
+- Capability Center now shows Verified or Partial based on the actual registry and fixture results, rather than stale manual labels, for mapped entries.
+- Added Open tool(s) actions to mapped capabilities, opening the existing tool category and the relevant tool form.
+- Preserves existing mobile navigation, chat, tools, memory and local storage keys.
+- Does not claim all 207 capabilities are implemented. Broad categories remain partial when only a subset of functions exists.
 
-- 40 direct deterministic tools (15 new) and 41 AI-callable tool schemas (includes approval-only `propose_task`).
-- New tools: circle_geometry, triangle_geometry, pythagorean_hypotenuse, density_calculator, momentum_calculator, potential_energy, electrical_energy, simple_interest, discount_price, break_even_units, weighted_average, percentile_calculator, grade_average, study_schedule, body_mass_index.
-- Direct tool forms and AI tool registry updated.
-- New fixtures in full diagnostics; local full run: 44 passed, 0 failed, 3 skipped (provider configured).
+## Test
+1. Deploy and hard-refresh the PWA. Check version v1.4.1.
+2. Open Capability Center. Confirm 'Force torque pressure and power' shows Verified with an Open tools button.
+3. Tap Open tools and confirm Engineering opens with Force tool form. Run 10 kg × 9.81 m/s² = 98.1 N.
+4. Confirm Geometry and trigonometry shows Partially implemented (circle, triangle, Pythagorean only).
+5. Run Full Diagnostics; expected 44 PASS, 0 FAIL, 3 SKIP, 0 BLOCKED with Groq configured.
+6. Confirm chat and existing conversations still work.
 
-## Install
-
-1. Back up your XENO conversations and workspaces before replacing files.
-2. Unzip, upload the contents into the **root** of the existing `Koa7-arch/Xeno-ai-gateway` GitHub repository, preserving paths including `public/`.
-3. Commit and wait for Cloudflare deployment. Keep existing Cloudflare secrets and Access configuration; do not upload credentials.
-4. Hard refresh/reopen the iPhone PWA; header should show v1.4.0.
-5. Run Diagnostics > Full Diagnostics. Export and share the report.
-
-## Limitations
-
-This is a **tool-library expansion**, not the completion of the entire 207-item capability roadmap. Web search, file processing, background jobs, external accounts, voice, and multimodal understanding still require separate working implementations and sometimes external providers. A green deterministic test does not certify live AI orchestration or mobile rendering.
-
-No new paid services are required for these tools. Existing Groq API usage remains subject to provider limits and charges, if any.
+## Scope & limitations
+Statuses prove specific backend fixture checks, not comprehensive browser/AI tests. Unmapped catalog entries retain their original roadmap status. No external integrations or background automations were added.
