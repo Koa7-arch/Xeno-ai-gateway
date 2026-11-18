@@ -1,6 +1,22 @@
 // XENO v1.3.1: deterministic, read-only diagnostics. No production data mutations.
-export const DIAGNOSTICS_VERSION='1.3.1';
+export const DIAGNOSTICS_VERSION='1.4.0';
 const fixtures={
+ circle_geometry:[{"radius":2},"area",12.5663706144],
+ triangle_geometry:[{"base":10,"height":4},"area",20],
+ pythagorean_hypotenuse:[{"a":3,"b":4},"hypotenuse",5],
+ density_calculator:[{"mass_kg":10,"volume_m3":2},"densityKgPerM3",5],
+ momentum_calculator:[{"mass_kg":2,"velocity_m_s":3},"momentumKgMPerS",6],
+ potential_energy:[{"mass_kg":2,"height_m":5},"energyJoules",98.1],
+ electrical_energy:[{"power_watts":1000,"hours":2},"energyKWh",2],
+ simple_interest:[{"principal":1000,"annual_rate_percent":5,"years":2},"interest",100],
+ discount_price:[{"price":100,"discount_percent":20,"tax_percent":5},"finalPrice",84],
+ break_even_units:[{"fixed_costs":1000,"unit_price":20,"unit_variable_cost":10},"units",100],
+ weighted_average:[{"values":[80,90],"weights":[1,3]},"weightedAverage",87.5],
+ percentile_calculator:[{"values":[1,2,3,4,5],"percentile":50},"percentileValue",3],
+ grade_average:[{"earned_points":45,"possible_points":50},"percentage",90],
+ study_schedule:[{"total_minutes":120,"sessions":4},"minutesPerSession",30],
+ body_mass_index:[{"weight_kg":72,"height_m":1.8},"bmi",22.2222222222],
+
  force_newton:[{mass_kg:10,acceleration_m_s2:9.81},'forceNewtons',98.1],
  torque_newton_meter:[{force_newtons:100,lever_arm_m:0.5},'torqueNm',50],
  pressure_pascal:[{force_newtons:1000,area_m2:0.5},'pressurePa',2000],
@@ -59,7 +75,7 @@ export async function runDiagnostics({mode,runTool,toolSchemas,engineVersion,pro
     tests.push(result('automation:background','skip','Background scheduling cannot be verified by a request-only Worker'));
   }
   tests.push(result('provider:configuration',providerConfigured?'pass':'blocked',providerConfigured?'Groq API key configured; no live request made':'Groq API key missing'));
-  tests.push(result('engine:registry',allNames.length>=26?'pass':'fail',`${allNames.length} AI tool definitions; engine ${engineVersion}`));
+  tests.push(result('engine:registry',allNames.length>=41?'pass':'fail',`${allNames.length} AI tool definitions; engine ${engineVersion}`));
   const counts={pass:0,fail:0,skip:0,blocked:0};for(const t of tests)counts[t.status]++;
   return {application:'XENO',version:DIAGNOSTICS_VERSION,diagnosticsVersion:DIAGNOSTICS_VERSION,mode,started,finished:new Date().toISOString(),counts,tests,notes:['Read-only diagnostic fixtures; no real user data is modified.','A passing tool fixture does not prove the AI chat or mobile UI works.','Skipped and blocked checks are not counted as passes.','No credentials, personal memory, or tokens are included in this report.']};
 }

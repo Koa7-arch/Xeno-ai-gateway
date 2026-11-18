@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {TOOL_SCHEMAS,DIRECT_TOOLS,runTool} from './tools-v06-backend.js';
-assert.equal(DIRECT_TOOLS.size,25);
-assert.equal(TOOL_SCHEMAS.length,26);
+assert.equal(DIRECT_TOOLS.size,40);
+assert.equal(TOOL_SCHEMAS.length,41);
 for(const name of DIRECT_TOOLS)assert(TOOL_SCHEMAS.some(x=>x.function.name===name));
 assert.equal(runTool('estimate_overtime_pay',{hours:60,hourly_rate:15}).grossPay,1050);
 assert.equal(runTool('goal_timeline',{current_balance:3000,target_balance:10000,contribution_per_period:500}).periods,14);

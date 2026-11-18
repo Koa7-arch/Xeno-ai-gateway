@@ -1,27 +1,24 @@
-# XENO v1.3.1 — Autonomous Diagnostics Engine
+# XENO v1.4.0 — Expanded Verified Tool Library
 
-Full replacement of v1.3.0. Preserve the directory paths when uploading to the existing GitHub repository. Cloudflare Access, GROQ_API_KEY, ACCESS_TEAM_DOMAIN, and ACCESS_AUD remain configured in Cloudflare; do not place secrets in GitHub.
+Full replacement for the existing Cloudflare Worker/GitHub deployment. Based on v1.3.1; preserves chat, Cloudflare Access authentication, existing browser storage, adaptive workspaces, and diagnostics.
 
-## New functionality
+## Included
 
-- Authenticated `POST /diagnostics/run` accepts `{ "mode": "quick" | "full" | "regression" }` with same-origin and JSON checks.
-- New **Diagnostics** tab runs backend fixtures automatically, compares outputs, displays pass/fail/skip/blocked, and exports a privacy-safe JSON report.
-- Quick runs a small core subset. Full and Regression currently run the same comprehensive deterministic suite; Regression is a baseline for later releases, not a change-aware comparison.
-- No user memory, tasks, integrations, or production data are modified by the tests.
-- No AI API calls or paid service requests are made by diagnostics. Provider configuration is checked without sending a live prompt.
+- 40 direct deterministic tools (15 new) and 41 AI-callable tool schemas (includes approval-only `propose_task`).
+- New tools: circle_geometry, triangle_geometry, pythagorean_hypotenuse, density_calculator, momentum_calculator, potential_energy, electrical_energy, simple_interest, discount_price, break_even_units, weighted_average, percentile_calculator, grade_average, study_schedule, body_mass_index.
+- Direct tool forms and AI tool registry updated.
+- New fixtures in full diagnostics; local full run: 44 passed, 0 failed, 3 skipped (provider configured).
 
-## Install from iPhone
+## Install
 
-1. Back up XENO conversations and workspaces first.
-2. Unzip this archive; upload/replace files into `Koa7-arch/Xeno-ai-gateway` with folder paths intact.
-3. Commit and wait for Cloudflare deployment. Reopen the installed PWA (relaunch if an old version is cached).
-4. Check header `v1.3.1`, open **Diagnostics**, and select **Full Diagnostics**.
-5. Tap **Export JSON Report** and upload the downloaded report to ChatGPT. Alternatively use **Copy Summary**.
+1. Back up your XENO conversations and workspaces before replacing files.
+2. Unzip, upload the contents into the **root** of the existing `Koa7-arch/Xeno-ai-gateway` GitHub repository, preserving paths including `public/`.
+3. Commit and wait for Cloudflare deployment. Keep existing Cloudflare secrets and Access configuration; do not upload credentials.
+4. Hard refresh/reopen the iPhone PWA; header should show v1.4.0.
+5. Run Diagnostics > Full Diagnostics. Export and share the report.
 
 ## Limitations
 
-- A pass verifies deterministic backend tool results for test fixtures, not the entire AI agent conversation or iPhone browser.
-- Live chat formatting, background automation, connected services, and push delivery are reported as skipped when not testable.
-- A configured Groq key does not prove the provider is reachable; no paid request is made.
-- Self-tests do not automatically edit, deploy, or repair production code.
-- For rollback, redeploy the prior v1.3.0 package. Local storage keys are unchanged.
+This is a **tool-library expansion**, not the completion of the entire 207-item capability roadmap. Web search, file processing, background jobs, external accounts, voice, and multimodal understanding still require separate working implementations and sometimes external providers. A green deterministic test does not certify live AI orchestration or mobile rendering.
+
+No new paid services are required for these tools. Existing Groq API usage remains subject to provider limits and charges, if any.
