@@ -1,6 +1,6 @@
 {
-  "version": "1.2.0",
-  "note": "Inventory, not a claim of implementation. Available=local/AI capability, limited=partial, requires-connection=external setup, planned=not built. Validate each on the target device.",
+  "version": "1.4.0",
+  "note": "Roadmap, not proof of implementation. Only directly mapped tool functions are implemented; consult diagnostics for verified fixtures.",
   "capabilities": [
     {
       "category": "AI Intelligence",
