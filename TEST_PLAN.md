@@ -1,5 +1,11 @@
-# Chat acceptance prompt
+# XENO v1.3.1 Acceptance Test
 
-XENO, respond in natural language, not JSON. Calculate 60 hours at $15 per hour with overtime after 40 hours at 1.5×. Use a readable table and show total gross pay. Then give me a three-step learning plan with a heading, bold key terms, and one blockquote. Finally, explain honestly which capabilities are available in this deployment and which are only planned. Do not print internal function names, tool arguments or developer traces.
+1. Verify the header reads v1.3.1 and normal chat input still works.
+2. Open Diagnostics from navigation. Run Quick Check, Full Diagnostics, and Regression Check.
+3. Confirm results have pass/fail/skip/blocked counts and expandable individual checks.
+4. Export a JSON report. It should contain only fixture results, tool IDs, timestamps, version, and nonsecret status notes.
+5. Copy Summary and paste into chat if file upload is inconvenient.
+6. Confirm tools, conversations, workspaces, and profiles still appear as before.
+7. If diagnostics cannot run, send the exact visible error and deployed version.
 
-Expected: $600 regular + $450 overtime = $1,050 gross; formatted heading, table, numbered list, blockquote; no internal tool call JSON.
+Expected local baseline (with Groq secret configured): Quick 7 pass; Full/Regression 29 pass and 3 skip. Provider configuration absent changes one pass to blocked. Actual deployment results may differ. The skip count includes live AI chat, external integrations, and background automations.

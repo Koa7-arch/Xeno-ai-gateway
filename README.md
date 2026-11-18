@@ -1,24 +1,27 @@
-# XENO v1.2.1 — Conversational Experience Update
+# XENO v1.3.1 — Autonomous Diagnostics Engine
 
-Full replacement based on the existing v1.2.0 source snapshot.
+Full replacement of v1.3.0. Preserve the directory paths when uploading to the existing GitHub repository. Cloudflare Access, GROQ_API_KEY, ACCESS_TEAM_DOMAIN, and ACCESS_AUD remain configured in Cloudflare; do not place secrets in GitHub.
 
-## Implemented
-- Assistant messages render a restricted, escaped Markdown subset: headings, bold, italics, lists, quotes, links, tables, and code fences. User messages remain plain text.
-- Rendering escapes HTML and restricts links to HTTP(S) to avoid executing model-provided HTML.
-- Backend prompt requires human-readable answers rather than internal function-call JSON.
-- If a model outputs a tool-call-shaped text response, the gateway requests one structured retry. It **never executes raw text as a tool call**.
-- Existing Groq gateway, Cloudflare Access, 15 deterministic tools, task proposals, workspaces, and capability catalog remain.
+## New functionality
 
-## Not implemented in this release
-The 207-item inventory is a roadmap, not 207 functional tools. External web search, files, voice, cloud background jobs, notifications and connected accounts are not implemented. Those require real providers, authorization, storage and tests.
+- Authenticated `POST /diagnostics/run` accepts `{ "mode": "quick" | "full" | "regression" }` with same-origin and JSON checks.
+- New **Diagnostics** tab runs backend fixtures automatically, compares outputs, displays pass/fail/skip/blocked, and exports a privacy-safe JSON report.
+- Quick runs a small core subset. Full and Regression currently run the same comprehensive deterministic suite; Regression is a baseline for later releases, not a change-aware comparison.
+- No user memory, tasks, integrations, or production data are modified by the tests.
+- No AI API calls or paid service requests are made by diagnostics. Provider configuration is checked without sending a live prompt.
 
-## Install
-Back up XENO local data first. Upload the ZIP contents to the root of GitHub preserving paths, commit and deploy. Test on iPhone. Revert the commit to roll back.
+## Install from iPhone
 
-## Acceptance tests
-1. Ask: "Calculate 60 hours at $15/hr with 1.5x overtime after 40 hours. Explain in a table." Expected gross $1,050, no function JSON.
-2. Ask for a bulleted study plan, headings, a table, and a quoted sentence. Verify rendering.
-3. Ask for a JavaScript example. Code fences should render as code, because code is requested.
-4. Ask: "Write <script>alert(1)</script> literally." It must appear as text, never execute.
-5. Check old conversations still load, input remains visible, and all 15 existing direct tools still run.
-6. Check workspaces, goals, proposals and backup/export.
+1. Back up XENO conversations and workspaces first.
+2. Unzip this archive; upload/replace files into `Koa7-arch/Xeno-ai-gateway` with folder paths intact.
+3. Commit and wait for Cloudflare deployment. Reopen the installed PWA (relaunch if an old version is cached).
+4. Check header `v1.3.1`, open **Diagnostics**, and select **Full Diagnostics**.
+5. Tap **Export JSON Report** and upload the downloaded report to ChatGPT. Alternatively use **Copy Summary**.
+
+## Limitations
+
+- A pass verifies deterministic backend tool results for test fixtures, not the entire AI agent conversation or iPhone browser.
+- Live chat formatting, background automation, connected services, and push delivery are reported as skipped when not testable.
+- A configured Groq key does not prove the provider is reachable; no paid request is made.
+- Self-tests do not automatically edit, deploy, or repair production code.
+- For rollback, redeploy the prior v1.3.0 package. Local storage keys are unchanged.

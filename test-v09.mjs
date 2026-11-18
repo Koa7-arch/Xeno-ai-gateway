@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {TOOL_SCHEMAS,DIRECT_TOOLS,runTool} from './tools-v06-backend.js';
-assert.equal(DIRECT_TOOLS.size,15);
-assert.equal(TOOL_SCHEMAS.length,16);
+assert.equal(DIRECT_TOOLS.size,25);
+assert.equal(TOOL_SCHEMAS.length,26);
 for(const name of DIRECT_TOOLS)assert(TOOL_SCHEMAS.some(x=>x.function.name===name));
 assert.equal(runTool('estimate_overtime_pay',{hours:60,hourly_rate:15}).grossPay,1050);
 assert.equal(runTool('goal_timeline',{current_balance:3000,target_balance:10000,contribution_per_period:500}).periods,14);
@@ -18,3 +18,15 @@ assert(runTool('work_shift_hours',{start:'25:00',end:'05:00',break_minutes:0}).e
 assert(runTool('loan_payment',{principal:100,annual_rate_percent:-1,months:12}).error);
 assert(!DIRECT_TOOLS.has('propose_task'));
 console.log('v0.9 suite: 15 direct tools, 16 AI schemas, 14 checks passed');
+assert.equal(runTool('force_newton',{mass_kg:10,acceleration_m_s2:9.81}).forceNewtons,98.1);
+assert.equal(runTool('torque_newton_meter',{force_newtons:100,lever_arm_m:0.5}).torqueNm,50);
+assert.equal(runTool('pressure_pascal',{force_newtons:1000,area_m2:0.5}).pressurePa,2000);
+assert(Math.abs(runTool('mechanical_power',{torque_nm:100,rpm:1800}).powerKW-18.8495559215)<1e-6);
+assert.equal(runTool('kinetic_energy',{mass_kg:10,velocity_m_s:5}).energyJoules,125);
+assert.equal(runTool('ohms_law',{voltage:12,current:2}).resistanceOhms,6);
+assert.equal(runTool('statistics_summary',{values:[1,2,3,4,5]}).median,3);
+assert.equal(runTool('pace_calculator',{distance_km:5,minutes:30}).kmPerHour,10);
+assert.equal(runTool('time_duration',{total_minutes:135.5}).seconds,30);
+assert.equal(runTool('reading_time',{text:'one two three four',words_per_minute:2}).estimatedMinutes,2);
+assert(runTool('pressure_pascal',{force_newtons:100,area_m2:0}).error);
+assert(runTool('statistics_summary',{values:[]}).error);

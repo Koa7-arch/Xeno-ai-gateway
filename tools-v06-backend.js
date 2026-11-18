@@ -1,6 +1,16 @@
 // XENO Mobile v0.6 — bounded deterministic tools and approval-only action proposals.
 // No eval, arbitrary URLs, shell commands, or external side effects.
 export const TOOL_SCHEMAS = [
+  {type:'function',function:{name:'force_newton',description:'Calculate force from mass and acceleration.',parameters:{type:'object',additionalProperties:false,properties:{mass_kg:{type:'number'},acceleration_m_s2:{type:'number'}},required:['mass_kg','acceleration_m_s2']}}},
+  {type:'function',function:{name:'torque_newton_meter',description:'Calculate torque from perpendicular force and lever arm.',parameters:{type:'object',additionalProperties:false,properties:{force_newtons:{type:'number'},lever_arm_m:{type:'number'}},required:['force_newtons','lever_arm_m']}}},
+  {type:'function',function:{name:'pressure_pascal',description:'Calculate pressure from force divided by area.',parameters:{type:'object',additionalProperties:false,properties:{force_newtons:{type:'number'},area_m2:{type:'number'}},required:['force_newtons','area_m2']}}},
+  {type:'function',function:{name:'mechanical_power',description:'Calculate mechanical power from torque and rotational speed.',parameters:{type:'object',additionalProperties:false,properties:{torque_nm:{type:'number'},rpm:{type:'number'}},required:['torque_nm','rpm']}}},
+  {type:'function',function:{name:'kinetic_energy',description:'Calculate kinetic energy from mass and velocity.',parameters:{type:'object',additionalProperties:false,properties:{mass_kg:{type:'number'},velocity_m_s:{type:'number'}},required:['mass_kg','velocity_m_s']}}},
+  {type:'function',function:{name:'ohms_law',description:'Calculate voltage, current, resistance, and power from two known values (V and I).',parameters:{type:'object',additionalProperties:false,properties:{voltage:{type:'number'},current:{type:'number'}},required:['voltage','current']}}},
+  {type:'function',function:{name:'statistics_summary',description:'Calculate mean, median, min, max, range and population standard deviation for a numeric dataset.',parameters:{type:'object',additionalProperties:false,properties:{values:{type:'array',items:{type:'number'},minItems:1,maxItems:200}},required:['values']}}},
+  {type:'function',function:{name:'pace_calculator',description:'Calculate pace and speed for a distance and elapsed time.',parameters:{type:'object',additionalProperties:false,properties:{distance_km:{type:'number'},minutes:{type:'number'}},required:['distance_km','minutes']}}},
+  {type:'function',function:{name:'time_duration',description:'Convert minutes to hours, minutes, and seconds.',parameters:{type:'object',additionalProperties:false,properties:{total_minutes:{type:'number'}},required:['total_minutes']}}},
+  {type:'function',function:{name:'reading_time',description:'Estimate reading time based on word count and reading speed.',parameters:{type:'object',additionalProperties:false,properties:{text:{type:'string'},words_per_minute:{type:'number'}},required:['text','words_per_minute']}}},
   {type:'function', function:{name:'calculate',description:'Perform precise basic arithmetic using two numbers. Use for pay and other numeric calculations; no tax assumptions.',parameters:{type:'object',additionalProperties:false,properties:{operation:{type:'string',enum:['add','subtract','multiply','divide','percentage']},a:{type:'number'},b:{type:'number'}},required:['operation','a','b']}}},
   {type:'function', function:{name:'convert_units',description:'Convert one value between supported units (length, mass, volume, pressure, and temperature).',parameters:{type:'object',additionalProperties:false,properties:{value:{type:'number'},from:{type:'string',enum:['mi','km','ft','m','in','cm','lb','kg','gal','L','psi','kPa','F','C']},to:{type:'string',enum:['mi','km','ft','m','in','cm','lb','kg','gal','L','psi','kPa','F','C']}},required:['value','from','to']}}},
   {type:'function', function:{name:'date_difference',description:'Compute the number of days between two calendar dates in YYYY-MM-DD format (timezone-independent).',parameters:{type:'object',additionalProperties:false,properties:{start:{type:'string'},end:{type:'string'}},required:['start','end']}}},
@@ -23,6 +33,63 @@ const round = n => Number(n.toPrecision(12));
 function failure(message){ return {error: message}; }
 export function runTool(name,args){
   if(!args || typeof args!=='object' || Array.isArray(args)) return failure('Invalid tool arguments');
+
+  if(name==='force_newton'){
+    const {mass_kg:m,acceleration_m_s2:a}=args;
+    if(!finite(m)||m<0||!finite(a))return failure('Invalid mass or acceleration');
+    return {forceNewtons:round(m*a),formula:'F = m × a'};
+  }
+  if(name==='torque_newton_meter'){
+    const {force_newtons:f,lever_arm_m:l}=args;
+    if(!finite(f)||!finite(l)||l<0)return failure('Invalid force or lever arm');
+    return {torqueNm:round(f*l),formula:'τ = F × r (perpendicular force assumed)'};
+  }
+  if(name==='pressure_pascal'){
+    const {force_newtons:f,area_m2:a}=args;
+    if(!finite(f)||!finite(a)||a<=0)return failure('Area must be greater than zero');
+    return {pressurePa:round(f/a),pressureKPa:round(f/a/1000),formula:'P = F / A'};
+  }
+  if(name==='mechanical_power'){
+    const {torque_nm:t,rpm:r}=args;
+    if(!finite(t)||!finite(r)||r<0)return failure('Invalid torque or RPM');
+    const watts=t*r*2*Math.PI/60;
+    return {powerWatts:round(watts),powerKW:round(watts/1000),formula:'P = τ × 2π × RPM / 60'};
+  }
+  if(name==='kinetic_energy'){
+    const {mass_kg:m,velocity_m_s:v}=args;
+    if(!finite(m)||m<0||!finite(v))return failure('Invalid mass or velocity');
+    return {energyJoules:round(.5*m*v*v),formula:'KE = ½mv²'};
+  }
+  if(name==='ohms_law'){
+    const {voltage:v,current:i}=args;
+    if(!finite(v)||!finite(i))return failure('Invalid voltage or current');
+    return {voltage:v,current:i,resistanceOhms:i===0?null:round(v/i),powerWatts:round(v*i),note:i===0?'Resistance undefined for zero current':undefined};
+  }
+  if(name==='statistics_summary'){
+    const v=args.values;
+    if(!Array.isArray(v)||v.length<1||v.length>200||!v.every(finite))return failure('Provide 1–200 finite numeric values');
+    const sorted=[...v].sort((a,b)=>a-b),n=v.length,mean=v.reduce((a,b)=>a+b,0)/n;
+    const variance=v.reduce((a,b)=>a+(b-mean)**2,0)/n;
+    return {count:n,mean:round(mean),median:round(n%2?sorted[(n-1)/2]:(sorted[n/2-1]+sorted[n/2])/2),min:sorted[0],max:sorted[n-1],range:round(sorted[n-1]-sorted[0]),populationStdDev:round(Math.sqrt(variance))};
+  }
+  if(name==='pace_calculator'){
+    const {distance_km:d,minutes:m}=args;
+    if(!finite(d)||d<=0||!finite(m)||m<=0)return failure('Distance and duration must be positive');
+    return {minutesPerKm:round(m/d),kmPerHour:round(d/(m/60))};
+  }
+  if(name==='time_duration'){
+    const m=args.total_minutes;
+    if(!finite(m)||m<0||m>1e7)return failure('Invalid duration');
+    const sec=Math.round(m*60);
+    return {hours:Math.floor(sec/3600),minutes:Math.floor(sec%3600/60),seconds:sec%60};
+  }
+  if(name==='reading_time'){
+    const {text,words_per_minute:w}=args;
+    if(typeof text!=='string'||text.length>10000||!finite(w)||w<=0||w>2000)return failure('Invalid text or reading speed');
+    const words=text.trim()?text.trim().split(/\s+/u).length:0;
+    return {words,estimatedMinutes:round(words/w),assumption:'Constant reading speed'};
+  }
+
   if(name==='calculate'){
     const {operation,a,b}=args;
     if(!finite(a)||!finite(b)||!['add','subtract','multiply','divide','percentage'].includes(operation))return failure('Invalid calculation');
@@ -159,4 +226,4 @@ export function validateToolRequest(method,request,url){
 }
 
 // Only these deterministic tools may be called directly from the workspace.
-export const DIRECT_TOOLS = new Set(['calculate','convert_units','date_difference','estimate_overtime_pay','savings_projection','percentage_change','loan_payment','goal_timeline','compound_growth','budget_summary','fuel_trip_estimate','work_shift_hours','date_offset','split_expense','text_statistics']);
+export const DIRECT_TOOLS = new Set(['force_newton','torque_newton_meter','pressure_pascal','mechanical_power','kinetic_energy','ohms_law','statistics_summary','pace_calculator','time_duration','reading_time','calculate','convert_units','date_difference','estimate_overtime_pay','savings_projection','percentage_change','loan_payment','goal_timeline','compound_growth','budget_summary','fuel_trip_estimate','work_shift_hours','date_offset','split_expense','text_statistics']);
