@@ -1,3 +1,5 @@
+XENO 3.1 — Project & Life Hub expansion
+
 # XENO v1.4.1 — Capability Registry & Tool Access
 
 Full replacement of v1.4.0. Upload files to the repository root preserving paths. Back up local app data first.
