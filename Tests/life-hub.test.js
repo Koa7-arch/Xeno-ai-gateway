@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {lifeHub,workspaceContext} from '../src/life-hub.js';
+const queries=[];const db={prepare(sql){const state={sql,args:[]};queries.push(state);return {bind(...args){state.args=args;return this},async run(){return {meta:{changes:1}}},async first(){return sql.startsWith('SELECT id FROM projects')?{id:'project-1'}:sql.startsWith('SELECT * FROM')?{id:'item-1'}:null},async all(){return {results:[]}}}}};
+const req=(method,data)=>({method,headers:new Headers({'content-type':'application/json'}),json:async()=>data,text:async()=>JSON.stringify(data)});
+test('create digital project stores planning state',async()=>{const r=await lifeHub(req('POST',{name:'XENO',type:'digital',description:'Assistant'}),db,'/api/projects');assert.equal(r.status,201);assert.ok(queries.some(q=>q.sql.startsWith('INSERT INTO projects')&&q.args.includes('digital')))});
+test('create physical project milestone references project',async()=>{const r=await lifeHub(req('POST',{project_id:'project-1',title:'Measure site'}),db,'/api/project_items');assert.equal(r.status,201)});
+test('reject project without title',async()=>{const r=await lifeHub(req('POST',{type:'physical'}),db,'/api/projects');assert.equal(r.status,400)});
+test('reject invalid project status',async()=>{const r=await lifeHub(req('PATCH',{status:'admin'}),db,'/api/projects/item-1');assert.equal(r.status,400)});
+test('save personal life journal entry',async()=>{const r=await lifeHub(req('POST',{title:'Work shift',content:'Long day',category:'work'}),db,'/api/life_entries');assert.equal(r.status,201)});
+test('routine requires schedule',async()=>{const r=await lifeHub(req('POST',{name:'Weekly review'}),db,'/api/routines');assert.equal(r.status,400)});
+test('workspace retrieval returns null with no records',async()=>{assert.equal(await workspaceContext(db,'my projects'),null)});

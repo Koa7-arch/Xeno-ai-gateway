@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {terms,rankMemories,conflicts,evaluateKnowledge} from '../src/core.js';
+test('term extraction excludes common words',()=>assert.deepEqual(terms('This project needs steel beams'),['needs','steel','beams']));
+test('retrieval ranks title match above content',()=>{const rows=[{id:'a',title:'Other',content:'steel',updated_at:'1'},{id:'b',title:'Steel',content:'other',updated_at:'1'}];assert.equal(rankMemories(rows,'steel')[0].id,'b')});
+test('retrieval excludes irrelevant entries',()=>assert.equal(rankMemories([{title:'Roof',content:'wood'}],'budget').length,0));
+test('conflict detector ignores archived and identical records',()=>{const rows=[{id:'a',title:'Height',content:'8 ft'},{id:'b',title:'height',content:'9 ft'},{id:'c',title:'height',content:'7 ft',archived:1}];assert.deepEqual(conflicts(rows)[0].ids,['a','b'])});
+test('knowledge readiness requires reviewed records without conflicts',()=>{assert.equal(evaluateKnowledge([{title:'Wall',content:'10',confidence:'user-confirmed'}]).readyForSpecialist,true);assert.equal(evaluateKnowledge([{title:'Wall',content:'10',confidence:'unverified'}]).readyForSpecialist,false)});
