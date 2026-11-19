@@ -10,5 +10,17 @@
   "vars": {
     "ACCESS_TEAM_DOMAIN": "damp-cake-d02f.cloudflareaccess.com",
     "ACCESS_AUD": "44cfcfb8fb546deab8a2757845bb2c425393a0566218e428fe89ea58485ff152"
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "8eeb9231-71c3-4f8d-bc9c-7e1dabca62d7"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "xeno-file-vault"
+    }
+  ]
 }
