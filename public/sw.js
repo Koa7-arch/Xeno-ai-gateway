@@ -1,30 +1,5 @@
-// XENO v0.4: network-first static assets; never cache API or Access pages.
-const CACHE = 'xeno-mobile-v141';
-const FILES = new Set(['/manifest.webmanifest', '/icon.svg']);
-self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const names = await caches.keys();
-    await Promise.all(names.filter(name => name.startsWith('xeno-mobile-') && name !== CACHE).map(name => caches.delete(name)));
-    await self.clients.claim();
-  })());
-});
-self.addEventListener('fetch', event => {
-  const request = event.request;
-  const url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== self.location.origin || !FILES.has(url.pathname)) return;
-  event.respondWith((async () => {
-    try {
-      const response = await fetch(request);
-      const type = response.headers.get('content-type') || '';
-      const expected = url.pathname === '/icon.svg' ? 'image/svg+xml' : 'application/manifest+json';
-      if (response.ok && response.type === 'basic' && type.includes(expected) && !response.redirected) {
-        const cache = await caches.open(CACHE);
-        await cache.put(request, response.clone());
-      }
-      return response;
-    } catch {
-      return (await caches.match(request)) || Response.error();
-    }
-  })());
-});
+// No API responses or protected HTML are cached. Network-first application.
+const CACHE='xeno-v31-static-rc1';
+self.addEventListener('install',()=>self.skipWaiting());
+self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k!==CACHE)await caches.delete(k);await self.clients.claim()})()));
+self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==self.location.origin||u.pathname.startsWith('/api/')||['/chat','/health','/tools/catalog','/tools/run','/diagnostics/run'].includes(u.pathname))return;if(/\.(svg|css|js|webmanifest)$/.test(u.pathname))e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))});
