@@ -1,1 +1,14 @@
-{ "name": "xeno-v3", "main": "src/index.js", "compatibility_date": "2026-11-01", "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true } }
+{
+  "name": "xeno-v3",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "damp-cake-d02f.cloudflareaccess.com",
+    "ACCESS_AUD": "44cfcfb8fb546deab8a2757845bb2c425393a0566218e428fe89ea58485ff152"
+  }
+}
